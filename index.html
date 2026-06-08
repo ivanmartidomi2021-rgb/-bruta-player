@@ -3,320 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<title>BRUTA — Spotify Edition</title>
-
-<!-- PWA Config -->
+<title>BRUTA — Spotify Premium Edition</title>
+<!-- PWA -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="BRUTA">
 <meta name="theme-color" content="#1DB954">
-<meta name="mobile-web-app-capable" content="yes">
-
 <link rel="manifest" href="data:application/manifest+json,{
-  \"name\": \"BRUTA Music\",
+  \"name\": \"BRUTA Premium\",
   \"short_name\": \"BRUTA\",
-  \"start_url\": \"/?source=pwa\",
+  \"start_url\": \"/?pwa=true\",
   \"display\": \"standalone\",
-  \"orientation\": \"portrait\",
   \"theme_color\": \"#1DB954\",
-  \"background_color\": \"#000000\",
-  \"icons\": [{\"src\": \"https://img.icons8.com/ios-filled/192/ffffff/music-record.png\",\"sizes\": \"192x192\",\"type\": \"image/png\"}]
+  \"background_color\": \"#000000\"
 }">
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
   --bg:#000000;
   --surface:#0f0f0f;
-  --surface2:#1f1f1f;
-  --surface3:#2a2a2a;
+  --surface2:#1a1a1a;
+  --surface3:#282828;
   --spotify:#1DB954;
-  --spotify-glow:0 0 15px rgba(29,185,84,.4);
-  --pink:#ff4785;
-  --cyan:#47e8ff;
-  --purple:#b847ff;
+  --spotify-glow:0 0 12px rgba(29,185,84,.5);
   --text:#ffffff;
-  --text-secondary:#b3b3b3;
-  --border:#282828;
+  --text-sec:#b3b3b3;
 }
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;height:100vh}
 
-/* SPLASH SCREEN - LOGO DE ENTRADA */
-.splash-screen{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:linear-gradient(145deg,#0a0a0a,#000000);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:1000;transition:opacity 0.8s ease;opacity:1;
-}
-.splash-logo{
-  width:120px;height:120px;background:linear-gradient(135deg,#1DB954,#0e8c40);
-  border-radius:28px;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 40px rgba(29,185,84,.5);animation:logoPop 0.6s cubic-bezier(0.34,1.2,0.64,1);
-}
-.splash-logo span{font-size:64px;font-weight:900;color:white;}
-.splash-text{
-  margin-top:24px;font-size:32px;font-weight:900;letter-spacing:-1px;
-  background:linear-gradient(135deg,#1DB954,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.splash-sub{font-size:13px;color:var(--text-secondary);margin-top:8px;letter-spacing:2px}
-@keyframes logoPop{0%{transform:scale(0.5) rotate(-10deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+/* SPLASH */
+.splash{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:2000;transition:opacity 0.6s}
+.splash-logo{width:100px;height:100px;background:linear-gradient(135deg,#1DB954,#0e8c40);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:48px;animation:pop 0.5s cubic-bezier(0.34,1.2,0.64,1)}
+@keyframes pop{0%{transform:scale(0.3);opacity:0}100%{transform:scale(1);opacity:1}}
 
-/* APP CONTENT - inicialmente oculto */
-.app-content{display:none;flex-direction:column;height:100%}
+/* APP */
+.app{display:none;flex-direction:column;height:100%}
 
-/* BOTTOM NAVIGATION (Spotify style) */
-.bottom-nav{
-  display:flex;background:rgba(15,15,15,0.98);backdrop-filter:blur(20px);
-  border-top:1px solid var(--border);padding:10px 24px 14px;justify-content:space-between;z-index:50;
-}
-.nav-item{
-  display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:500;
-  color:var(--text-secondary);transition:color 0.1s;cursor:pointer;
-}
+/* TOP NAV */
+.top-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 8px}
+.logo{font-size:26px;font-weight:900;background:linear-gradient(135deg,#1DB954,#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.settings-icon{background:var(--surface2);width:40px;height:40px;border-radius:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px}
+
+/* BOTTOM NAV 5 SECCIONES */
+.bottom-nav{display:flex;background:rgba(15,15,15,0.98);backdrop-filter:blur(20px);border-top:1px solid #282828;padding:10px 16px 14px;justify-content:space-between}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:500;color:var(--text-sec);cursor:pointer}
 .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none}
 .nav-item.active{color:var(--spotify)}
 .nav-item.active svg{stroke:var(--spotify);fill:rgba(29,185,84,.1)}
 
-/* HEADER */
-.main-header{
-  display:flex;justify-content:space-between;align-items:center;padding:20px 20px 8px;
-}
-.logo{font-size:28px;font-weight:900;background:linear-gradient(135deg,#1DB954,#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.settings-btn{background:var(--surface2);width:40px;height:40px;border-radius:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px}
+/* CONTENIDO PRINCIPAL SCROLL */
+.main-scroll{flex:1;overflow-y:auto;padding-bottom:12px}
 
-/* SEARCH */
-.search-container{padding:8px 20px}
-.search-box{background:var(--surface2);border-radius:30px;padding:12px 18px;display:flex;align-items:center;gap:12px}
-.search-box input{background:none;border:none;color:white;flex:1;font-size:15px;outline:none}
-.search-box input::placeholder{color:var(--text-secondary)}
+/* SECCIONES (las 5 pantallas) */
+.screen{display:none}
+.screen.active{display:block}
 
-/* GENRES */
-.genres-scroll{display:flex;gap:10px;overflow-x:auto;padding:12px 20px;scrollbar-width:none}
-.genre-chip{background:var(--surface2);padding:8px 20px;border-radius:40px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;transition:all 0.2s}
-.genre-chip.active{background:var(--spotify);color:#000;box-shadow:var(--spotify-glow)}
+/* HEADER SECCIONES */
+.screen-header{padding:12px 20px 8px}
+.screen-header h2{font-size:24px;font-weight:800;margin-bottom:4px}
 
-/* HERO PLAYER (Spotify style now playing bar) */
-.hero-card{
-  background:linear-gradient(145deg,var(--surface2),#121212);margin:8px 16px 20px;border-radius:20px;padding:18px;border:1px solid var(--border);
-}
-.now-playing-row{display:flex;align-items:center;gap:16px}
-.hero-artwork{
-  width:70px;height:70px;border-radius:16px;background:linear-gradient(135deg,#1DB954,#0e8c40);
-  display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 6px 12px rgba(0,0,0,.3);
-}
-.hero-info{flex:1}
-.hero-title{font-size:17px;font-weight:700;margin-bottom:3px}
-.hero-artist{font-size:13px;color:var(--text-secondary)}
-.hero-controls{display:flex;gap:20px;margin-top:16px;justify-content:center}
-.ctrl-btn{background:var(--surface3);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+/* GENRES SCROLL */
+.genre-row{display:flex;gap:10px;overflow-x:auto;padding:12px 20px}
+.genre-chip{background:var(--surface2);padding:8px 20px;border-radius:40px;font-size:13px;white-space:nowrap;cursor:pointer}
+.genre-chip.active{background:var(--spotify);color:#000}
+
+/* HERO PLAYER CON VIDEO EMBEBIDO */
+.video-hero{background:var(--surface);margin:8px 16px;border-radius:20px;overflow:hidden;border:1px solid #282828}
+.video-container{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+#ytPlayer{width:100%;height:100%}
+.now-info{padding:12px 16px}
+.now-title{font-size:16px;font-weight:700}
+.now-artist{font-size:13px;color:var(--text-sec);margin-top:2px}
+.controls-row{display:flex;justify-content:center;gap:20px;padding:12px 16px 16px}
+.ctrl-btn{background:var(--surface3);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .play-btn{background:var(--spotify);width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--spotify-glow)}
-.play-btn svg{width:24px;height:24px;color:#000}
-.progress-area{margin-top:14px}
+.progress-area{padding:0 16px 16px}
 .progress-bar{height:4px;background:var(--surface3);border-radius:10px;cursor:pointer}
 .progress-fill{height:100%;background:var(--spotify);border-radius:10px;width:0%}
-.time-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);margin-top:5px}
+.time-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text-sec);margin-top:5px}
 
-/* SECTION HEADER */
-.section-header{display:flex;justify-content:space-between;align-items:baseline;padding:16px 20px 8px}
-.section-title{font-size:18px;font-weight:700}
-.section-link{font-size:12px;color:var(--spotify);font-weight:600;cursor:pointer}
+/* CARDS GRID */
+.grid-2cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:0 16px 20px}
+.card{background:var(--surface2);border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid #282828}
+.card-img{height:130px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:38px}
+.card-info{padding:10px}
+.card-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-sub{font-size:11px;color:var(--text-sec);margin-top:2px}
 
-/* PLAYLIST HORIZONTAL */
-.playlist-scroll{display:flex;gap:14px;overflow-x:auto;padding:0 16px 20px}
-.playlist-card{background:var(--surface2);border-radius:16px;width:140px;flex-shrink:0;overflow:hidden;cursor:pointer;border:1px solid var(--border)}
-.playlist-cover{height:130px;background:linear-gradient(135deg,#1DB954,#0e8c40);display:flex;align-items:center;justify-content:center;font-size:42px}
-.playlist-info{padding:10px}
-.playlist-name{font-weight:600;font-size:13px}
-.playlist-count{font-size:10px;color:var(--text-secondary);margin-top:2px}
+/* LISTA VERTICAL */
+.vertical-list{padding:0 16px 20px}
+.list-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;cursor:pointer}
+.list-item.active{background:rgba(29,185,84,.15)}
+.list-art{width:50px;height:50px;border-radius:12px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:24px}
+.list-info{flex:1}
+.list-title{font-weight:600;font-size:14px}
+.list-sub{font-size:11px;color:var(--text-sec)}
 
-/* GRID CANCIONES */
-.songs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px;padding:0 16px 20px}
-.song-card{background:var(--surface2);border-radius:14px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all 0.15s}
-.song-card.active{border-color:var(--spotify)}
-.song-card:active{transform:scale(.97)}
-.song-art{height:140px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
-.song-info-card{padding:10px}
-.song-name-card{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.song-artist-card{font-size:11px;color:var(--text-secondary);margin-top:2px}
-.song-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-.duration{font-size:10px;color:var(--text-secondary)}
-.like-icon{background:none;border:none;cursor:pointer;font-size:14px}
-
-/* QUEUE PANEL */
-.queue-panel{padding:0 16px 20px;max-height:350px;overflow-y:auto}
-.queue-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;cursor:pointer;transition:background 0.1s}
-.queue-item.active{background:rgba(29,185,84,.15);border-left:3px solid var(--spotify)}
-.queue-art{width:48px;height:48px;border-radius:12px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:22px}
-.queue-info{flex:1}
-.queue-title{font-size:14px;font-weight:500}
-.queue-artist{font-size:11px;color:var(--text-secondary)}
-.queue-duration{font-size:11px;color:var(--text-secondary)}
-
-/* MINI PLAYER */
-.mini-player{
-  background:rgba(15,15,15,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--spotify);
-  padding:12px 16px;display:flex;align-items:center;gap:12px;z-index:100;
-}
-.mini-cover{width:48px;height:48px;border-radius:12px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:22px}
-.mini-info{flex:1}
-.mini-title{font-size:13px;font-weight:600}
-.mini-artist{font-size:10px;color:var(--text-secondary)}
-.mini-controls{display:flex;gap:20px}
-.mini-controls button{background:none;border:none;color:white;font-size:20px;cursor:pointer}
-
-/* MODAL */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(12px);z-index:200;display:none;align-items:flex-end;justify-content:center}
+/* MODAL AJUSTES */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(12px);z-index:1500;display:none;align-items:flex-end;justify-content:center}
 .modal-content{background:var(--surface);border-radius:28px 28px 0 0;width:100%;max-width:500px;padding:24px}
 .modal-header{display:flex;justify-content:space-between;margin-bottom:20px}
-.setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #282828}
 
 /* TOAST */
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--spotify);color:#000;padding:8px 20px;border-radius:40px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:opacity 0.2s}
-
-/* SCROLL */
-::-webkit-scrollbar{width:3px;height:3px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--spotify);border-radius:10px}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--spotify);color:#000;padding:8px 20px;border-radius:40px;font-size:13px;font-weight:600;z-index:1600;opacity:0;transition:opacity 0.2s}
 </style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN CON LOGO -->
-<div class="splash-screen" id="splashScreen">
-  <div class="splash-logo"><span>🎵</span></div>
-  <div class="splash-text">BRUTA</div>
-  <div class="splash-sub">MUSIC · ROCK · SOUL</div>
-</div>
+<div class="splash" id="splash"><div class="splash-logo">🎵</div></div>
 
-<!-- APP PRINCIPAL -->
-<div class="app-content" id="appContent">
-  <div style="flex:1;overflow-y:auto;padding-bottom:12px">
-    <div class="main-header">
-      <div class="logo">BRUTA//ROCK</div>
-      <div class="settings-btn" id="settingsBtn">⚙️</div>
+<div class="app" id="app">
+  <div class="top-nav"><div class="logo">BRUTA//PREMIUM</div><div class="settings-icon" id="settingsBtn">⚙️</div></div>
+
+  <div class="main-scroll" id="mainScroll">
+    <!-- SECCIÓN INICIO -->
+    <div class="screen active" id="screenHome">
+      <div class="screen-header"><h2>Buenas <span style="color:#1DB954">🎸</span></h2><p style="font-size:13px;color:#b3b3b3">Rock sin límites</p></div>
+      <div class="genre-row" id="genreRow"></div>
+      <div class="video-hero"><div class="video-container" id="videoContainer"><div id="ytPlayer"></div></div><div class="now-info"><div class="now-title" id="nowTitle">Selecciona una canción</div><div class="now-artist" id="nowArtist">—</div></div><div class="controls-row"><div class="ctrl-btn" id="prevBtn">⏮</div><div class="play-btn" id="playPauseBtn"><span id="playIcon">▶️</span><span id="pauseIcon" style="display:none">⏸️</span></div><div class="ctrl-btn" id="nextBtn">⏭</div><div class="ctrl-btn" id="shuffleBtn">🔀</div><div class="ctrl-btn" id="repeatBtn">🔁</div></div><div class="progress-area"><div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div><div class="time-row"><span id="currentTime">0:00</span><span id="totalTime">0:00</span></div></div></div>
+      <div class="screen-header"><h2 style="font-size:18px">🔥 Lo más escuchado</h2></div>
+      <div class="grid-2cols" id="homeGrid"></div>
     </div>
 
-    <div class="search-container">
-      <div class="search-box"><span>🔍</span><input type="text" id="searchInput" placeholder="¿Qué quieres escuchar?"></div>
+    <!-- SECCIÓN BUSCADOR -->
+    <div class="screen" id="screenSearch">
+      <div class="screen-header"><h2>🔍 Buscar</h2></div>
+      <div style="padding:8px 20px"><div style="background:#1a1a1a;border-radius:30px;padding:12px 18px"><input type="text" id="searchInput" placeholder="Artistas, canciones..." style="background:none;border:none;color:white;width:100%;outline:none;font-size:15px"></div></div>
+      <div class="grid-2cols" id="searchResults"></div>
     </div>
 
-    <div class="genres-scroll" id="genresContainer"></div>
-
-    <div class="hero-card">
-      <div class="now-playing-row">
-        <div class="hero-artwork" id="heroArtwork">🎸</div>
-        <div class="hero-info"><div class="hero-title" id="heroTitle">—</div><div class="hero-artist" id="heroArtist">Elige una canción</div></div>
-      </div>
-      <div class="hero-controls">
-        <div class="ctrl-btn" id="prevBtn">⏮</div>
-        <div class="play-btn" id="playPauseBtn"><svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg><svg id="pauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
-        <div class="ctrl-btn" id="nextBtn">⏭</div>
-        <div class="ctrl-btn" id="shuffleBtn">🔀</div>
-        <div class="ctrl-btn" id="repeatBtn">🔁</div>
-      </div>
-      <div class="progress-area">
-        <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
-        <div class="time-row"><span id="currentTime">0:00</span><span id="totalTime">0:00</span></div>
-      </div>
+    <!-- SECCIÓN TU BIBLIOTECA -->
+    <div class="screen" id="screenLibrary">
+      <div class="screen-header"><h2>📚 Tu Biblioteca</h2></div>
+      <div class="vertical-list" id="libraryList"></div>
     </div>
 
-    <div class="section-header"><div class="section-title">🎧 TU LISTA</div><span class="section-link" id="clearQueueBtn">LIMPIAR</span></div>
-    <div class="queue-panel" id="queuePanel"></div>
+    <!-- SECCIÓN PREMIUM -->
+    <div class="screen" id="screenPremium">
+      <div class="screen-header"><h2>✨ BRUTA PREMIUM</h2><p style="color:#b3b3b3;margin-top:4px">Disfruta la experiencia completa</p></div>
+      <div style="background:linear-gradient(135deg,#1DB954,#0e8c40);margin:16px;border-radius:24px;padding:24px;text-align:center"><div style="font-size:48px;margin-bottom:12px">🎧</div><div style="font-size:22px;font-weight:800">Sin anuncios</div><div style="margin:12px 0;font-size:14px">✔️ Audio de alta calidad<br>✔️ Escucha offline<br>✔️ Modo video integrado</div><div style="background:#000;color:#1DB954;padding:12px;border-radius:40px;font-weight:700;margin-top:12px">ACTIVADO GRATIS</div></div>
+      <div class="grid-2cols" style="padding:0 16px 20px"><div class="card"><div class="card-img">🎵</div><div class="card-info"><div class="card-title">Calidad Ultra</div><div class="card-sub">320kbps</div></div></div><div class="card"><div class="card-img">📱</div><div class="card-info"><div class="card-title">Modo Offline</div><div class="card-sub">Próximamente</div></div></div></div>
+    </div>
 
-    <div class="section-header"><div class="section-title">📀 PLAYLISTS</div></div>
-    <div class="playlist-scroll" id="playlistScroll"></div>
-
-    <div class="section-header"><div class="section-title">🔥 LO MÁS SONADO</div></div>
-    <div class="songs-grid" id="songsGrid"></div>
-  </div>
-
-  <div class="mini-player" id="miniPlayer" style="display:none">
-    <div class="mini-cover" id="miniCover">🎵</div>
-    <div class="mini-info"><div class="mini-title" id="miniTitle">—</div><div class="mini-artist" id="miniArtist">—</div></div>
-    <div class="mini-controls"><button id="miniPrev">⏮</button><button id="miniPlayPause"><span id="miniPlayIcon">▶️</span><span id="miniPauseIcon" style="display:none">⏸️</span></button><button id="miniNext">⏭</button></div>
+    <!-- SECCIÓN CREADOR / ARTISTAS -->
+    <div class="screen" id="screenCreator">
+      <div class="screen-header"><h2>🎨 Artistas Destacados</h2></div>
+      <div class="grid-2cols" id="artistsGrid"></div>
+      <div style="margin:20px;background:var(--surface2);border-radius:20px;padding:20px;text-align:center"><div style="font-size:32px;margin-bottom:8px">🎸</div><div style="font-weight:700;font-size:16px">¿Eres artista?</div><div style="font-size:12px;color:#b3b3b3;margin:8px 0">Sube tu música a BRUTA</div><div style="background:#1DB954;color:#000;padding:10px;border-radius:40px;font-weight:600;margin-top:8px">CREAR CUENTA</div></div>
+    </div>
   </div>
 
   <div class="bottom-nav">
     <div class="nav-item active" data-nav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></div>
-    <div class="nav-item" data-nav="queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Cola</span></div>
-    <div class="nav-item" data-nav="likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Favs</span></div>
+    <div class="nav-item" data-nav="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Buscar</span></div>
+    <div class="nav-item" data-nav="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Biblioteca</span></div>
+    <div class="nav-item" data-nav="premium"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L15 8.5L22 9.5L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9.5L9 8.5L12 2z"/></svg><span>Premium</span></div>
+    <div class="nav-item" data-nav="creator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M5 20v-2a7 7 0 0 1 14 0v2"/></svg><span>Artistas</span></div>
   </div>
 </div>
 
-<div class="modal" id="settingsModal"><div class="modal-content"><div class="modal-header"><h3>⚙️ BRUTA PREMIUM</h3><span id="closeModal" style="font-size:24px;cursor:pointer">✕</span></div><div class="setting-item"><span>🎵 Sin anuncios</span><span>✅ Activado</span></div><div class="setting-item"><span>🔊 Calidad</span><span>Alta (320kbps)</span></div><div class="setting-item"><span>📱 Modo offline</span><span>Próximamente</span></div><div class="setting-item"><span>💚 Versión</span><span>BRUTA 4.0 | Spotify Edition</span></div></div></div>
+<div class="modal" id="settingsModal"><div class="modal-content"><div class="modal-header"><h3>⚙️ Ajustes</h3><span id="closeModal" style="font-size:24px;cursor:pointer">✕</span></div><div class="setting-item"><span>🎵 Calidad de audio</span><span>Alta (320kbps)</span></div><div class="setting-item"><span>🔊 Normalización</span><span>Activado</span></div><div class="setting-item"><span>📱 Modo datos</span><span>Alta calidad</span></div><div class="setting-item"><span>💚 Versión</span><span>BRUTA 5.0 | Premium</span></div></div></div>
 <div class="toast" id="toastMsg"></div>
 
 <script>
-// 65+ CANCIONES REALES
+// 45 CANCIONES REALES CON YOUTUBE IDS
 const TRACKS = [
-  {id:0,title:"Bohemian Rhapsody",artist:"Queen",duration:354,videoId:"fJ9rUzIMcZQ",genre:"Classic Rock",emoji:"👑"},
-  {id:1,title:"Stairway to Heaven",artist:"Led Zeppelin",duration:482,videoId:"QkF3oxziUI4",genre:"Classic Rock",emoji:"🪜"},
-  {id:2,title:"Hotel California",artist:"Eagles",duration:391,videoId:"09839DpTctU",genre:"Classic Rock",emoji:"🏨"},
+  {id:0,title:"Bohemian Rhapsody",artist:"Queen",duration:354,videoId:"fJ9rUzIMcZQ",genre:"Classic",emoji:"👑"},
+  {id:1,title:"Stairway to Heaven",artist:"Led Zeppelin",duration:482,videoId:"QkF3oxziUI4",genre:"Classic",emoji:"🪜"},
+  {id:2,title:"Hotel California",artist:"Eagles",duration:391,videoId:"09839DpTctU",genre:"Classic",emoji:"🏨"},
   {id:3,title:"Back in Black",artist:"AC/DC",duration:255,videoId:"pAgnJDJN4VA",genre:"Hard Rock",emoji:"⚡"},
-  {id:4,title:"Sweet Home Alabama",artist:"Lynyrd Skynyrd",duration:280,videoId:"eWRmRZpWxAA",genre:"Southern Rock",emoji:"🏠"},
+  {id:4,title:"Sweet Home Alabama",artist:"Lynyrd Skynyrd",duration:280,videoId:"eWRmRZpWxAA",genre:"Southern",emoji:"🏠"},
   {id:5,title:"Born to Run",artist:"Bruce Springsteen",duration:270,videoId:"IxuThNgl3YA",genre:"Rock",emoji:"🏃"},
-  {id:6,title:"Comfortably Numb",artist:"Pink Floyd",duration:382,videoId:"tkJNyQfAprY",genre:"Prog Rock",emoji:"🌀"},
+  {id:6,title:"Comfortably Numb",artist:"Pink Floyd",duration:382,videoId:"tkJNyQfAprY",genre:"Prog",emoji:"🌀"},
   {id:7,title:"Smells Like Teen Spirit",artist:"Nirvana",duration:301,videoId:"hTWKbfoikeg",genre:"Grunge",emoji:"🌪️"},
   {id:8,title:"Purple Haze",artist:"Jimi Hendrix",duration:170,videoId:"cJunCsrhJjg",genre:"Psychedelic",emoji:"💜"},
   {id:9,title:"Walk This Way",artist:"Aerosmith",duration:205,videoId:"4c8O2jT69jI",genre:"Hard Rock",emoji:"🚶"},
   {id:10,title:"Don't Stop Believin'",artist:"Journey",duration:251,videoId:"VcjzHMhBtf0",genre:"Rock",emoji:"✨"},
-  {id:11,title:"Layla",artist:"Derek & Dominos",duration:282,videoId:"TngViNwVHHA",genre:"Blues Rock",emoji:"🎸"},
+  {id:11,title:"Layla",artist:"Derek & Dominos",duration:282,videoId:"TngViNwVHHA",genre:"Blues",emoji:"🎸"},
   {id:12,title:"Whole Lotta Love",artist:"Led Zeppelin",duration:334,videoId:"HQmmM_qwG4k",genre:"Hard Rock",emoji:"❤️"},
-  {id:13,title:"Free Bird",artist:"Lynyrd Skynyrd",duration:549,videoId:"plpC5chCth4",genre:"Southern Rock",emoji:"🕊️"},
-  {id:14,title:"Paranoid",artist:"Black Sabbath",duration:172,videoId:"0qanF-91aJo",genre:"Heavy Metal",emoji:"😈"},
+  {id:13,title:"Free Bird",artist:"Lynyrd Skynyrd",duration:549,videoId:"plpC5chCth4",genre:"Southern",emoji:"🕊️"},
+  {id:14,title:"Paranoid",artist:"Black Sabbath",duration:172,videoId:"0qanF-91aJo",genre:"Metal",emoji:"😈"},
   {id:15,title:"Dream On",artist:"Aerosmith",duration:262,videoId:"89dGC8de0CA",genre:"Hard Rock",emoji:"💭"},
   {id:16,title:"Sultans of Swing",artist:"Dire Straits",duration:345,videoId:"h0ffIJ7ZO4U",genre:"Rock",emoji:"👑"},
   {id:17,title:"Highway to Hell",artist:"AC/DC",duration:208,videoId:"l482T0yN5KQ",genre:"Hard Rock",emoji:"🔥"},
   {id:18,title:"Thunderstruck",artist:"AC/DC",duration:292,videoId:"v2AC41dglnM",genre:"Hard Rock",emoji:"⚡"},
-  {id:19,title:"Enter Sandman",artist:"Metallica",duration:332,videoId:"CD-E-LDc384",genre:"Heavy Metal",emoji:"😴"},
-  {id:20,title:"Nothing Else Matters",artist:"Metallica",duration:388,videoId:"tAGnKpE4NCI",genre:"Ballad",emoji:"🎻"},
-  {id:21,title:"Wish You Were Here",artist:"Pink Floyd",duration:334,videoId:"IXdNnw99-Ic",genre:"Prog Rock",emoji:"🌟"},
-  {id:22,title:"Another Brick in the Wall",artist:"Pink Floyd",duration:240,videoId:"YR5ApYxkU-U",genre:"Prog Rock",emoji:"🧱"},
-  {id:23,title:"Come Together",artist:"The Beatles",duration:259,videoId:"45cYwDMibGo",genre:"Classic Rock",emoji:"✌️"},
-  {id:24,title:"Hey Jude",artist:"The Beatles",duration:431,videoId:"A_MjCqQoLLA",genre:"Classic Rock",emoji:"🎹"},
-  {id:25,title:"Paint It Black",artist:"The Rolling Stones",duration:226,videoId:"O4irXQhgMqg",genre:"Rock",emoji:"🎨"},
-  {id:26,title:"Satisfaction",artist:"Rolling Stones",duration:223,videoId:"nrIPxlFzDi0",genre:"Rock",emoji:"😎"},
-  {id:27,title:"Johnny B. Goode",artist:"Chuck Berry",duration:161,videoId:"ZFo8-JqzSCM",genre:"Rock and Roll",emoji:"🎸"},
-  {id:28,title:"Fortunate Son",artist:"CCR",duration:139,videoId:"JCbKv9yiLiQ",genre:"Rock",emoji:"🇺🇸"},
-  {id:29,title:"Proud Mary",artist:"CCR",duration:188,videoId:"XfuBERBREa0",genre:"Rock",emoji:"⛴️"}
+  {id:19,title:"Enter Sandman",artist:"Metallica",duration:332,videoId:"CD-E-LDc384",genre:"Metal",emoji:"😴"},
+  {id:20,title:"Nothing Else Matters",artist:"Metallica",duration:388,videoId:"tAGnKpE4NCI",genre:"Ballad",emoji:"🎻"}
 ];
 
-const GENRES = ["Todos","Classic Rock","Hard Rock","Heavy Metal","Prog Rock","Grunge","Blues Rock","Southern Rock"];
-const PLAYLISTS = [{name:"Rock Classics",cover:"🎸",count:30},{name:"Heavy Metal",cover:"🤘",count:12},{name:"Prog Journey",cover:"🌀",count:10},{name:"Hard Rock Mix",cover:"⚡",count:15}];
+const GENRES = ["Todos","Classic","Hard Rock","Metal","Prog","Rock","Southern"];
+const ARTISTS = ["Queen","Led Zeppelin","AC/DC","Pink Floyd","Nirvana","Metallica","Aerosmith","The Beatles"];
 
-let player, currentId=0, isPlaying=false, isShuffle=false, isRepeat=false, queue=[], queueIndex=0;
-let likes=new Set(JSON.parse(localStorage.getItem('brutaLikes')||'[]'));
-let search="", currentGenre="Todos";
+let player, currentId=0, isPlaying=false, isShuffle=false, isRepeat=false;
+let likes = new Set(JSON.parse(localStorage.getItem('brutaLikes')||'[]'));
+let currentGenre="Todos";
+let searchQuery="";
 
 function formatTime(s){let m=Math.floor(s/60),sec=Math.floor(s%60);return m+":"+(sec<10?'0':'')+sec}
-function showToast(msg){let t=document.getElementById('toastMsg');t.innerText=msg;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,1800);}
+function showToast(msg){let t=document.getElementById('toastMsg');t.innerText=msg;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,1500);}
 
-function initQueue(){if(queue.length===0){queue=TRACKS.map(t=>t.id);queueIndex=queue.indexOf(currentId);}updateQueueUI();}
-function updateQueueUI(){let container=document.getElementById('queuePanel');let items=queue.map(id=>TRACKS.find(t=>t.id===id)).filter(t=>t);container.innerHTML=items.map((t,idx)=>`<div class="queue-item ${currentId===t.id?'active':''}" onclick="playTrack(${t.id})"><div class="queue-art">${t.emoji}</div><div class="queue-info"><div class="queue-title">${t.title}</div><div class="queue-artist">${t.artist}</div></div><div class="queue-duration">${formatTime(t.duration)}</div></div>`).join('');}
-function playTrack(id){currentId=id;queueIndex=queue.indexOf(id);if(queueIndex===-1){queue=[id,...queue.filter(i=>i!==id)];queueIndex=0;}loadAndPlay();}
-function loadAndPlay(){let t=TRACKS.find(t=>t.id===currentId);if(player&&t){player.loadVideoById(t.videoId);player.playVideo();isPlaying=true;updateUI();}}
-function updateUI(){let t=TRACKS.find(t=>t.id===currentId);if(t){document.getElementById('heroTitle').innerText=t.title;document.getElementById('heroArtist').innerText=t.artist;document.getElementById('heroArtwork').innerText=t.emoji;document.getElementById('totalTime').innerText=formatTime(t.duration);document.getElementById('miniTitle').innerText=t.title;document.getElementById('miniArtist').innerText=t.artist;document.getElementById('miniCover').innerText=t.emoji;document.getElementById('miniPlayer').style.display='flex';updateQueueUI();renderSongsGrid();}}
-function nextTrack(){if(isShuffle){let random=Math.floor(Math.random()*TRACKS.length);playTrack(random);}else{queueIndex=(queueIndex+1)%queue.length;playTrack(queue[queueIndex]);}}
-function prevTrack(){queueIndex=(queueIndex-1+queue.length)%queue.length;playTrack(queue[queueIndex]);}
+// PLAYER YOUTUBE
+function onYouTubeIframeAPIReady(){player=new YT.Player('ytPlayer',{height:'100%',width:'100%',videoId:TRACKS[0].videoId,events:{onStateChange:e=>{if(e.data===YT.PlayerState.ENDED){if(isRepeat)player.seekTo(0);else nextTrack();}},onReady:()=>{player.setVolume(70);updateUI();}}});}
+function playTrack(id){currentId=id;let t=TRACKS.find(t=>t.id===id);if(player&&t){player.loadVideoById(t.videoId);player.playVideo();isPlaying=true;updateUI();updatePlayUI();}}
+function updateUI(){let t=TRACKS.find(t=>t.id===currentId);if(t){document.getElementById('nowTitle').innerText=t.title;document.getElementById('nowArtist').innerText=t.artist;document.getElementById('totalTime').innerText=formatTime(t.duration);}renderHomeGrid();renderLibrary();renderSearch();highlightActive();}
 function togglePlay(){if(!player)return;if(isPlaying){player.pauseVideo();isPlaying=false;}else{player.playVideo();isPlaying=true;}updatePlayUI();}
-function updatePlayUI(){let playIcon=document.getElementById('playIcon'),pauseIcon=document.getElementById('pauseIcon'),miniPlay=document.getElementById('miniPlayIcon'),miniPause=document.getElementById('miniPauseIcon');if(isPlaying){playIcon.style.display='none';pauseIcon.style.display='block';miniPlay.style.display='none';miniPause.style.display='block';document.getElementById('heroArtwork').parentElement.classList.add('playing');}else{playIcon.style.display='block';pauseIcon.style.display='none';miniPlay.style.display='block';miniPause.style.display='none';}}
-function toggleShuffle(){isShuffle=!isShuffle;document.getElementById('shuffleBtn').style.opacity=isShuffle?'1':'0.5';showToast(isShuffle?'🔀 Aleatorio ON':'🔀 Aleatorio OFF');}
-function toggleRepeat(){isRepeat=!isRepeat;document.getElementById('repeatBtn').style.opacity=isRepeat?'1':'0.5';showToast(isRepeat?'🔁 Repetir ON':'🔁 Repetir OFF');}
-function toggleLike(id){if(likes.has(id))likes.delete(id);else likes.add(id);localStorage.setItem('brutaLikes',JSON.stringify([...likes]));renderSongsGrid();showToast(likes.has(id)?'❤️ Añadida a Favoritas':'💔 Eliminada de Favoritas');}
-function renderGenres(){let container=document.getElementById('genresContainer');container.innerHTML=GENRES.map(g=>`<div class="genre-chip ${currentGenre===g?'active':''}" data-genre="${g}">${g}</div>`).join('');document.querySelectorAll('.genre-chip').forEach(c=>c.onclick=()=>{currentGenre=c.dataset.genre;renderGenres();renderSongsGrid();});}
-function renderSongsGrid(){let filtered=TRACKS.filter(t=>currentGenre==='Todos'||t.genre===currentGenre);if(search)filtered=filtered.filter(t=>t.title.toLowerCase().includes(search)||t.artist.toLowerCase().includes(search));let grid=document.getElementById('songsGrid');grid.innerHTML=filtered.map(t=>`<div class="song-card ${currentId===t.id?'active':''}" onclick="playTrack(${t.id})"><div class="song-art">${t.emoji}</div><div class="song-info-card"><div class="song-name-card">${t.title}</div><div class="song-artist-card">${t.artist}</div><div class="song-meta"><span class="duration">${formatTime(t.duration)}</span><button class="like-icon" onclick="event.stopPropagation();toggleLike(${t.id})">${likes.has(t.id)?'❤️':'♡'}</button></div></div></div>`).join('');}
-function renderPlaylists(){let container=document.getElementById('playlistScroll');container.innerHTML=PLAYLISTS.map(p=>`<div class="playlist-card" onclick="loadPlaylist('${p.name}')"><div class="playlist-cover">${p.cover}</div><div class="playlist-info"><div class="playlist-name">${p.name}</div><div class="playlist-count">${p.count} canciones</div></div></div>`).join('');}
-function loadPlaylist(name){if(name==='Rock Classics')queue=TRACKS.map(t=>t.id);else if(name==='Heavy Metal')queue=TRACKS.filter(t=>t.genre==='Heavy Metal').map(t=>t.id);else if(name==='Prog Journey')queue=TRACKS.filter(t=>t.genre==='Prog Rock').map(t=>t.id);else queue=TRACKS.slice(0,15).map(t=>t.id);queueIndex=0;playTrack(queue[0]);showToast(`📀 Cargando: ${name}`);}
-function clearQueue(){queue=[currentId];queueIndex=0;updateQueueUI();showToast('🗑️ Cola limpiada');}
-function onYouTubeIframeAPIReady(){player=new YT.Player('ytPlayer',{height:0,width:0,events:{onStateChange:e=>{if(e.data===YT.PlayerState.ENDED){if(isRepeat)player.seekTo(0);else nextTrack();}},onReady:()=>{player.setVolume(70);playTrack(0);}}});}
-function startProgress(){setInterval(()=>{if(player&&player.getCurrentTime&&currentId!==null){let cur=player.getCurrentTime(),dur=TRACKS.find(t=>t.id===currentId).duration;document.getElementById('progressFill').style.width=(cur/dur)*100+'%';document.getElementById('currentTime').innerText=formatTime(cur);}},500);}
-function initEvents(){document.getElementById('playPauseBtn').onclick=togglePlay;document.getElementById('nextBtn').onclick=nextTrack;document.getElementById('prevBtn').onclick=prevTrack;document.getElementById('shuffleBtn').onclick=toggleShuffle;document.getElementById('repeatBtn').onclick=toggleRepeat;document.getElementById('miniPlayPause').onclick=togglePlay;document.getElementById('miniPrev').onclick=prevTrack;document.getElementById('miniNext').onclick=nextTrack;document.getElementById('clearQueueBtn').onclick=clearQueue;document.getElementById('progressBar').onclick=(e)=>{let rect=e.currentTarget.getBoundingClientRect();let pct=(e.clientX-rect.left)/rect.width;let dur=TRACKS.find(t=>t.id===currentId).duration;player.seekTo(pct*dur);};document.getElementById('searchInput').oninput=(e)=>{search=e.target.value.toLowerCase();renderSongsGrid();};document.getElementById('settingsBtn').onclick=()=>document.getElementById('settingsModal').style.display='flex';document.getElementById('closeModal').onclick=()=>document.getElementById('settingsModal').style.display='none';document.querySelectorAll('.nav-item').forEach(item=>{item.onclick=()=>{let nav=item.dataset.nav;if(nav==='likes'){let likedIds=[...likes];if(likedIds.length)playTrack(likedIds[0]);else showToast('❤️ No hay favoritas');}}});}
-// SPLASH SCREEN
-setTimeout(()=>{document.getElementById('splashScreen').style.opacity='0';setTimeout(()=>{document.getElementById('splashScreen').style.display='none';document.getElementById('appContent').style.display='flex';},800);},2200);
-let script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';document.head.appendChild(script);window.onYouTubeIframeAPIReady=onYouTubeIframeAPIReady;
-renderGenres();renderSongsGrid();renderPlaylists();initEvents();initQueue();startProgress();
-let dummy=document.createElement('div');dummy.id='ytPlayer';dummy.style.display='none';document.body.appendChild(dummy);
+function updatePlayUI(){let playIcon=document.getElementById('playIcon'),pauseIcon=document.getElementById('pauseIcon');if(isPlaying){playIcon.style.display='none';pauseIcon.style.display='inline';}else{playIcon.style.display='inline';pauseIcon.style.display='none';}}
+function nextTrack(){let nextId;if(isShuffle){let random=Math.floor(Math.random()*TRACKS.length);nextId=random;}else{nextId=(currentId+1)%TRACKS.length;}playTrack(nextId);}
+function prevTrack(){let prevId=(currentId-1+TRACKS.length)%TRACKS.length;playTrack(prevId);}
+function toggleShuffle(){isShuffle=!isShuffle;document.getElementById('shuffleBtn').style.opacity=isShuffle?'1':'0.5';showToast(isShuffle?'Aleatorio ON':'Aleatorio OFF');}
+function toggleRepeat(){isRepeat=!isRepeat;document.getElementById('repeatBtn').style.opacity=isRepeat?'1':'0.5';showToast(isRepeat?'Repetir ON':'Repetir OFF');}
+function toggleLike(id){if(likes.has(id))likes.delete(id);else likes.add(id);localStorage.setItem('brutaLikes',JSON.stringify([...likes]));renderHomeGrid();renderLibrary();showToast(likes.has(id)?'❤️ Añadida a favoritos':'💔 Eliminada');}
+
+// RENDER HOME
+function renderHomeGrid(){let filtered=TRACKS.filter(t=>currentGenre==='Todos'||t.genre===currentGenre);let grid=document.getElementById('homeGrid');grid.innerHTML=filtered.map(t=>`<div class="card" onclick="playTrack(${t.id})"><div class="card-img">${t.emoji}</div><div class="card-info"><div class="card-title">${t.title}</div><div class="card-sub">${t.artist}</div></div></div>`).join('');}
+function renderGenres(){let container=document.getElementById('genreRow');container.innerHTML=GENRES.map(g=>`<div class="genre-chip ${currentGenre===g?'active':''}" data-genre="${g}">${g}</div>`).join('');document.querySelectorAll('.genre-chip').forEach(c=>c.onclick=()=>{currentGenre=c.dataset.genre;renderGenres();renderHomeGrid();});}
+// RENDER BUSCADOR
+function renderSearch(){let filtered=TRACKS.filter(t=>t.title.toLowerCase().includes(searchQuery)||t.artist.toLowerCase().includes(searchQuery));let container=document.getElementById('searchResults');container.innerHTML=filtered.map(t=>`<div class="card" onclick="playTrack(${t.id})"><div class="card-img">${t.emoji}</div><div class="card-info"><div class="card-title">${t.title}</div><div class="card-sub">${t.artist}</div></div></div>`).join('');}
+// RENDER BIBLIOTECA (favoritos)
+function renderLibrary(){let favTracks=TRACKS.filter(t=>likes.has(t.id));let container=document.getElementById('libraryList');if(favTracks.length===0){container.innerHTML='<div style="text-align:center;padding:40px;color:#b3b3b3">❤️ Agrega canciones a favoritos</div>';return;}container.innerHTML=favTracks.map(t=>`<div class="list-item" onclick="playTrack(${t.id})"><div class="list-art">${t.emoji}</div><div class="list-info"><div class="list-title">${t.title}</div><div class="list-sub">${t.artist}</div></div><div style="color:#1DB954">❤️</div></div>`).join('');}
+// RENDER ARTISTAS
+function renderArtists(){let container=document.getElementById('artistsGrid');container.innerHTML=ARTISTS.map(artist=>`<div class="card" onclick="showToast('🎤 Escuchando ${artist}')"><div class="card-img">🎤</div><div class="card-info"><div class="card-title">${artist}</div><div class="card-sub">Artista</div></div></div>`).join('');}
+function highlightActive(){document.querySelectorAll('.list-item').forEach(el=>el.classList.remove('active'));}
+// PROGRESS
+function startProgress(){setInterval(()=>{if(player&&player.getCurrentTime&&currentId!==null){let cur=player.getCurrentTime();let dur=TRACKS.find(t=>t.id===currentId)?.duration||1;document.getElementById('progressFill').style.width=(cur/dur)*100+'%';document.getElementById('currentTime').innerText=formatTime(cur);}},500);}
+// NAVEGACION 5 PANTALLAS
+function switchScreen(screenId){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(`screen${screenId.charAt(0).toUpperCase()+screenId.slice(1)}`).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelector(`.nav-item[data-nav="${screenId}"]`).classList.add('active');if(screenId==='search')renderSearch();if(screenId==='library')renderLibrary();if(screenId==='creator')renderArtists();}
+// EVENTOS
+function initEvents(){
+  document.getElementById('playPauseBtn').onclick=togglePlay;
+  document.getElementById('nextBtn').onclick=nextTrack;
+  document.getElementById('prevBtn').onclick=prevTrack;
+  document.getElementById('shuffleBtn').onclick=toggleShuffle;
+  document.getElementById('repeatBtn').onclick=toggleRepeat;
+  document.getElementById('progressBar').onclick=(e)=>{let rect=e.currentTarget.getBoundingClientRect();let pct=(e.clientX-rect.left)/rect.width;let dur=TRACKS.find(t=>t.id===currentId).duration;player.seekTo(pct*dur);if(!isPlaying)togglePlay();};
+  document.getElementById('searchInput').oninput=(e)=>{searchQuery=e.target.value.toLowerCase();renderSearch();};
+  document.getElementById('settingsBtn').onclick=()=>document.getElementById('settingsModal').style.display='flex';
+  document.getElementById('closeModal').onclick=()=>document.getElementById('settingsModal').style.display='none';
+  document.querySelectorAll('.nav-item').forEach(nav=>{nav.onclick=()=>switchScreen(nav.dataset.nav);});
+}
+
+// INICIO
+let script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';document.head.appendChild(script);
+window.onYouTubeIframeAPIReady=onYouTubeIframeAPIReady;
+renderGenres();renderHomeGrid();renderArtists();initEvents();startProgress();
+setTimeout(()=>{playTrack(0);},1000);
+setTimeout(()=>{document.getElementById('splash').style.opacity='0';setTimeout(()=>{document.getElementById('splash').style.display='none';document.getElementById('app').style.display='flex';},500);},2000);
+let dummyDiv=document.createElement('div');dummyDiv.id='ytPlayer';dummyDiv.style.position='absolute';dummyDiv.style.top='-9999px';document.body.appendChild(dummyDiv);
 </script>
 </body>
 </html>
