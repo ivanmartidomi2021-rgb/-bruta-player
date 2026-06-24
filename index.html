@@ -14,7 +14,7 @@
   \"start_url\": \"/?pwa=true\",
   \"display\": \"standalone\",
   \"theme_color\": \"#1DB954\",
-  \"background_color\": \"#000000\"
+  \"background_color\": \"#121212\"
 }">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -32,28 +32,24 @@
 }
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;height:100vh}
 
-/* SCROLLBAR */
-::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:10px}
 
-/* SPLASH */
 .splash{position:fixed;inset:0;background:#121212;display:flex;align-items:center;justify-content:center;z-index:2000;transition:opacity 0.6s;flex-direction:column}
 .splash-logo{width:80px;height:80px;background:linear-gradient(135deg,#1DB954,#0e8c40);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;animation:pop 0.5s cubic-bezier(0.34,1.2,0.64,1);box-shadow:0 0 40px rgba(29,185,84,.2)}
 .splash-text{color:#1DB954;font-weight:700;font-size:18px;margin-top:16px;letter-spacing:2px}
 @keyframes pop{0%{transform:scale(0.3);opacity:0}100%{transform:scale(1);opacity:1}}
 
-/* APP */
 .app{display:none;flex-direction:column;height:100%}
 
-/* TOP NAV */
 .top-nav{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 8px;background:var(--bg)}
 .logo{font-size:22px;font-weight:900;color:#1DB954;letter-spacing:-0.5px}
 .logo span{color:#fff;font-weight:300}
 .top-actions{display:flex;gap:12px;align-items:center}
-.top-actions .icon-btn{background:var(--surface2);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;border:none;color:#fff}
+.top-actions .icon-btn{background:var(--surface2);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;border:none;color:#fff;transition:background 0.2s}
+.top-actions .icon-btn:hover{background:var(--surface3)}
 
-/* BOTTOM NAV */
 .bottom-nav{display:flex;background:var(--bg);border-top:1px solid var(--surface2);padding:8px 8px 12px;justify-content:space-around}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:600;color:var(--text-sec);cursor:pointer;padding:4px 12px;border-radius:8px;transition:all 0.2s;background:transparent;border:none}
 .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none}
@@ -61,19 +57,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .nav-item.active svg{stroke:#fff;fill:rgba(255,255,255,.05)}
 .nav-item:hover{color:#fff}
 
-/* CONTENIDO */
 .main-scroll{flex:1;overflow-y:auto;padding-bottom:4px}
-
-/* SECCIONES */
 .screen{display:none}
 .screen.active{display:block}
 
-/* HEADER */
 .screen-header{padding:16px 20px 8px}
 .screen-header h2{font-size:22px;font-weight:800;letter-spacing:-0.5px}
 .screen-header .sub{font-size:13px;color:var(--text-sec);margin-top:2px}
 
-/* PLAYLIST ESPECIAL - ESTILO SPOTIFY */
+/* PLAYLIST ESPECIAL */
 .special-playlist{background:linear-gradient(135deg,#1a1a2e,#16213e);margin:8px 16px 12px;border-radius:16px;overflow:hidden;border:1px solid #2a2a4a}
 .special-header{background:rgba(255,255,255,.03);padding:16px 18px 12px;border-bottom:1px solid rgba(255,255,255,.05)}
 .special-header .badge{display:inline-block;background:#1DB954;color:#000;font-size:10px;font-weight:800;padding:2px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
@@ -82,7 +74,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .special-list{padding:4px 6px}
 .special-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;transition:background 0.15s;margin:2px 0}
 .special-item:hover{background:rgba(255,255,255,.06)}
-.special-item .num{font-size:12px;font-weight:700;color:var(--text-dim);width:22px;text-align:center}
+.special-item .cover{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .special-item .info{flex:1;min-width:0}
 .special-item .info .title{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .special-item .info .artist{font-size:11px;color:var(--text-sec)}
@@ -90,14 +82,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .special-item:hover .play-btn-mini{opacity:1}
 .special-item .duration{font-size:11px;color:var(--text-dim);flex-shrink:0}
 
-/* GENRES */
 .genre-row{display:flex;gap:8px;overflow-x:auto;padding:8px 16px 12px;scrollbar-width:none}
 .genre-row::-webkit-scrollbar{display:none}
 .genre-chip{background:var(--surface2);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;border:1px solid transparent;transition:all 0.2s;color:var(--text-sec)}
 .genre-chip.active{background:var(--spotify);color:#000;border-color:var(--spotify)}
 .genre-chip:hover{border-color:var(--text-sec)}
 
-/* PLAYER - ESTILO SPOTIFY */
 .player-card{background:var(--surface);margin:0 16px 12px;border-radius:16px;overflow:hidden;border:1px solid var(--surface2)}
 .video-container{position:relative;width:100%;aspect-ratio:16/9;background:#000}
 #ytPlayer{width:100%;height:100%}
@@ -116,32 +106,33 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .progress-bar:hover .progress-fill::after{opacity:1}
 .time-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:4px}
 
-/* GRID CARDS */
-.grid-2cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;padding:0 16px 20px}
-.card{background:var(--surface2);border-radius:12px;overflow:hidden;cursor:pointer;transition:background 0.2s}
-.card:hover{background:var(--surface3)}
-.card-img{height:120px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:34px}
+/* CARDS CON IMAGENES DE PORTADA */
+.grid-2cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px;padding:0 16px 20px}
+.card{background:var(--surface2);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s}
+.card:hover{background:var(--surface3);transform:scale(1.02)}
+.card-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative;background:var(--surface3)}
+.card-img .gradient{position:absolute;inset:0;opacity:0.3;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,0.6))}
+.card-img .play-overlay{position:absolute;bottom:8px;right:8px;width:32px;height:32px;background:#1DB954;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#000;opacity:0;transition:opacity 0.2s;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.card:hover .play-overlay{opacity:1}
 .card-info{padding:10px 12px 12px}
 .card-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
 .card-sub{font-size:11px;color:var(--text-sec);margin-top:2px}
 
-/* VERTICAL LIST */
+/* PORTADAS PARA LISTA VERTICAL */
 .vertical-list{padding:0 16px 20px}
 .list-item{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:10px;cursor:pointer;transition:background 0.15s}
 .list-item:hover{background:rgba(255,255,255,.04)}
-.list-art{width:44px;height:44px;border-radius:10px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.list-art{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .list-info{flex:1;min-width:0}
 .list-title{font-weight:600;font-size:14px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .list-sub{font-size:11px;color:var(--text-sec)}
 
-/* PREMIUM */
 .premium-card{background:linear-gradient(135deg,#1DB954,#0e8c40);margin:16px;border-radius:20px;padding:28px 24px;text-align:center}
 .premium-card .icon{font-size:48px;margin-bottom:8px}
 .premium-card h3{font-size:20px;font-weight:800;color:#000}
 .premium-card p{font-size:13px;color:rgba(0,0,0,0.7);margin:6px 0 12px}
-.premium-btn{background:#000;color:#1DB954;padding:12px;border-radius:40px;font-weight:700;border:none;width:100%;font-size:14px}
+.premium-btn{background:#000;color:#1DB954;padding:12px;border-radius:40px;font-weight:700;border:none;width:100%;font-size:14px;cursor:pointer}
 
-/* MODAL */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(16px);z-index:1500;display:none;align-items:flex-end;justify-content:center}
 .modal-content{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:500px;padding:24px}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -151,7 +142,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .setting-item .label{font-size:14px}
 .setting-item .value{font-size:13px;color:var(--text-sec)}
 
-/* TOAST */
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--surface2);color:#fff;padding:10px 24px;border-radius:40px;font-size:13px;font-weight:500;z-index:1600;opacity:0;transition:opacity 0.25s;border:1px solid var(--surface3)}
 </style>
 </head>
@@ -163,7 +153,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 </div>
 
 <div class="app" id="app">
-  <!-- TOP NAV -->
   <div class="top-nav">
     <div class="logo">BRUTA <span>· premium</span></div>
     <div class="top-actions">
@@ -171,17 +160,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main-scroll" id="mainScroll">
-    
-    <!-- INICIO -->
     <div class="screen active" id="screenHome">
       <div class="screen-header">
         <h2>Buenas tardes</h2>
         <div class="sub">🎸 Rock & urbano sin límites</div>
       </div>
       
-      <!-- PLAYLIST ESPECIAL DE LA CAPTURA -->
       <div class="special-playlist" id="specialPlaylist">
         <div class="special-header">
           <span class="badge">★ Playlist exclusiva</span>
@@ -191,10 +176,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
         <div class="special-list" id="specialList"></div>
       </div>
       
-      <!-- GÉNEROS -->
       <div class="genre-row" id="genreRow"></div>
       
-      <!-- REPRODUCTOR -->
       <div class="player-card">
         <div class="video-container"><div id="ytPlayer"></div></div>
         <div class="player-info">
@@ -223,7 +206,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
       <div class="grid-2cols" id="homeGrid"></div>
     </div>
 
-    <!-- BUSCADOR -->
     <div class="screen" id="screenSearch">
       <div class="screen-header"><h2>🔍 Buscar</h2></div>
       <div style="padding:8px 16px">
@@ -235,13 +217,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
       <div class="grid-2cols" id="searchResults"></div>
     </div>
 
-    <!-- BIBLIOTECA -->
     <div class="screen" id="screenLibrary">
       <div class="screen-header"><h2>📚 Tu Biblioteca</h2><div class="sub">Canciones que te gustan</div></div>
       <div class="vertical-list" id="libraryList"></div>
     </div>
 
-    <!-- PREMIUM -->
     <div class="screen" id="screenPremium">
       <div class="screen-header"><h2>✨ Premium</h2><div class="sub">Disfruta la experiencia completa</div></div>
       <div class="premium-card">
@@ -251,12 +231,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
         <button class="premium-btn">ACTIVADO GRATIS</button>
       </div>
       <div class="grid-2cols">
-        <div class="card"><div class="card-img">🎵</div><div class="card-info"><div class="card-title">Calidad Ultra</div><div class="card-sub">320kbps</div></div></div>
-        <div class="card"><div class="card-img">📱</div><div class="card-info"><div class="card-title">Modo Offline</div><div class="card-sub">Próximamente</div></div></div>
+        <div class="card"><div class="card-img" style="background:linear-gradient(135deg,#1DB954,#0e8c40);font-size:36px">🎵</div><div class="card-info"><div class="card-title">Calidad Ultra</div><div class="card-sub">320kbps</div></div></div>
+        <div class="card"><div class="card-img" style="background:linear-gradient(135deg,#4a00e0,#8e2de2);font-size:36px">📱</div><div class="card-info"><div class="card-title">Modo Offline</div><div class="card-sub">Próximamente</div></div></div>
       </div>
     </div>
 
-    <!-- ARTISTAS -->
     <div class="screen" id="screenCreator">
       <div class="screen-header"><h2>🎨 Artistas</h2><div class="sub">Descubre nuevos talentos</div></div>
       <div class="grid-2cols" id="artistsGrid"></div>
@@ -264,12 +243,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
         <div style="font-size:28px;margin-bottom:6px">🎸</div>
         <div style="font-weight:700;font-size:15px">¿Eres artista?</div>
         <div style="font-size:12px;color:var(--text-sec);margin:4px 0 12px">Sube tu música a BRUTA</div>
-        <button style="background:var(--spotify);color:#000;padding:10px;border-radius:40px;font-weight:600;border:none;width:100%;font-size:13px">CREAR CUENTA</button>
+        <button style="background:var(--spotify);color:#000;padding:10px;border-radius:40px;font-weight:600;border:none;width:100%;font-size:13px;cursor:pointer">CREAR CUENTA</button>
       </div>
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
     <button class="nav-item active" data-nav="home">
       <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -294,7 +272,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
   </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -312,65 +289,88 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 <script>
 // ============================================================
-// TODAS LAS CANCIONES DE LA CAPTURA + 45 MÁS (TOTAL 53)
+// TODAS LAS CANCIONES CON COLORES Y GRADIENTES PARA PORTADAS
 // ============================================================
+const COLORS = [
+  'linear-gradient(135deg,#f093fb,#f5576c)',
+  'linear-gradient(135deg,#4facfe,#00f2fe)',
+  'linear-gradient(135deg,#43e97b,#38f9d7)',
+  'linear-gradient(135deg,#fa709a,#fee140)',
+  'linear-gradient(135deg,#a18cd1,#fbc2eb)',
+  'linear-gradient(135deg,#fccb90,#d57eeb)',
+  'linear-gradient(135deg,#89f7fe,#66a6ff)',
+  'linear-gradient(135deg,#f6d365,#fda085)',
+  'linear-gradient(135deg,#f093fb,#f5576c)',
+  'linear-gradient(135deg,#4facfe,#00f2fe)',
+  'linear-gradient(135deg,#43e97b,#38f9d7)',
+  'linear-gradient(135deg,#fa709a,#fee140)',
+  'linear-gradient(135deg,#a18cd1,#fbc2eb)',
+  'linear-gradient(135deg,#fccb90,#d57eeb)',
+  'linear-gradient(135deg,#89f7fe,#66a6ff)',
+  'linear-gradient(135deg,#f6d365,#fda085)',
+  'linear-gradient(135deg,#ffecd2,#fcb69f)',
+  'linear-gradient(135deg,#a1c4fd,#c2e9fb)',
+  'linear-gradient(135deg,#d4fc79,#96e6a1)',
+  'linear-gradient(135deg,#f093fb,#f5576c)',
+];
+
 const TRACKS = [
   // --- CANCIONES DE LA CAPTURA (IDs 0-7) ---
-  {id:0,title:"escápate",artist:"Natos y Waor",duration:210,videoId:"5oY1iXq_NLA",genre:"Urbano",emoji:"🏃",special:true},
-  {id:1,title:"Simpons",artist:"Natos y Waor",duration:198,videoId:"mQQqCk7_0SI",genre:"Urbano",emoji:"👨‍👦",special:true},
-  {id:2,title:"Tattoo",artist:"Lola Índigo",duration:189,videoId:"u4P2RjM6gQI",genre:"Pop",emoji:"💉",special:true},
-  {id:3,title:"Tu boda",artist:"Omar Montes",duration:174,videoId:"hPqNnNFwqU8",genre:"Urbano",emoji:"💒",special:true},
-  {id:4,title:"Tu y Yo",artist:"Natos y Waor",duration:225,videoId:"otT7YgcQs2U",genre:"Urbano",emoji:"💑",special:true},
-  {id:5,title:"UNA CERVEZA",artist:"Rels B",duration:193,videoId:"p26IXN5Pqbk",genre:"Urbano",emoji:"🍺",special:true},
-  {id:6,title:"vete ya",artist:"Natos y Waor",duration:204,videoId:"-B3zmKLAhzM",genre:"Urbano",emoji:"👋",special:true},
-  {id:7,title:"vss",artist:"Natos y Waor",duration:216,videoId:"k7lL4yIx_oo",genre:"Urbano",emoji:"📞",special:true},
+  {id:0,title:"escápate",artist:"Natos y Waor",duration:210,videoId:"5oY1iXq_NLA",genre:"Urbano",emoji:"🏃",special:true,color:COLORS[0]},
+  {id:1,title:"Simpons",artist:"Natos y Waor",duration:198,videoId:"mQQqCk7_0SI",genre:"Urbano",emoji:"👨‍👦",special:true,color:COLORS[1]},
+  {id:2,title:"Tattoo",artist:"Lola Índigo",duration:189,videoId:"u4P2RjM6gQI",genre:"Pop",emoji:"💉",special:true,color:COLORS[2]},
+  {id:3,title:"Tu boda",artist:"Omar Montes",duration:174,videoId:"hPqNnNFwqU8",genre:"Urbano",emoji:"💒",special:true,color:COLORS[3]},
+  {id:4,title:"Tu y Yo",artist:"Natos y Waor",duration:225,videoId:"otT7YgcQs2U",genre:"Urbano",emoji:"💑",special:true,color:COLORS[4]},
+  {id:5,title:"UNA CERVEZA",artist:"Rels B",duration:193,videoId:"p26IXN5Pqbk",genre:"Urbano",emoji:"🍺",special:true,color:COLORS[5]},
+  {id:6,title:"vete ya",artist:"Natos y Waor",duration:204,videoId:"-B3zmKLAhzM",genre:"Urbano",emoji:"👋",special:true,color:COLORS[6]},
+  {id:7,title:"vss",artist:"Natos y Waor",duration:216,videoId:"k7lL4yIx_oo",genre:"Urbano",emoji:"📞",special:true,color:COLORS[7]},
   
   // --- RESTO DE CANCIONES (45) ---
-  {id:8,title:"Bohemian Rhapsody",artist:"Queen",duration:354,videoId:"fJ9rUzIMcZQ",genre:"Classic",emoji:"👑"},
-  {id:9,title:"Stairway to Heaven",artist:"Led Zeppelin",duration:482,videoId:"QkF3oxziUI4",genre:"Classic",emoji:"🪜"},
-  {id:10,title:"Hotel California",artist:"Eagles",duration:391,videoId:"09839DpTctU",genre:"Classic",emoji:"🏨"},
-  {id:11,title:"Back in Black",artist:"AC/DC",duration:255,videoId:"pAgnJDJN4VA",genre:"Hard Rock",emoji:"⚡"},
-  {id:12,title:"Sweet Home Alabama",artist:"Lynyrd Skynyrd",duration:280,videoId:"eWRmRZpWxAA",genre:"Southern",emoji:"🏠"},
-  {id:13,title:"Born to Run",artist:"Bruce Springsteen",duration:270,videoId:"IxuThNgl3YA",genre:"Rock",emoji:"🏃"},
-  {id:14,title:"Comfortably Numb",artist:"Pink Floyd",duration:382,videoId:"tkJNyQfAprY",genre:"Prog",emoji:"🌀"},
-  {id:15,title:"Smells Like Teen Spirit",artist:"Nirvana",duration:301,videoId:"hTWKbfoikeg",genre:"Grunge",emoji:"🌪️"},
-  {id:16,title:"Purple Haze",artist:"Jimi Hendrix",duration:170,videoId:"cJunCsrhJjg",genre:"Psychedelic",emoji:"💜"},
-  {id:17,title:"Walk This Way",artist:"Aerosmith",duration:205,videoId:"4c8O2jT69jI",genre:"Hard Rock",emoji:"🚶"},
-  {id:18,title:"Don't Stop Believin'",artist:"Journey",duration:251,videoId:"VcjzHMhBtf0",genre:"Rock",emoji:"✨"},
-  {id:19,title:"Layla",artist:"Derek & Dominos",duration:282,videoId:"TngViNwVHHA",genre:"Blues",emoji:"🎸"},
-  {id:20,title:"Whole Lotta Love",artist:"Led Zeppelin",duration:334,videoId:"HQmmM_qwG4k",genre:"Hard Rock",emoji:"❤️"},
-  {id:21,title:"Free Bird",artist:"Lynyrd Skynyrd",duration:549,videoId:"plpC5chCth4",genre:"Southern",emoji:"🕊️"},
-  {id:22,title:"Paranoid",artist:"Black Sabbath",duration:172,videoId:"0qanF-91aJo",genre:"Metal",emoji:"😈"},
-  {id:23,title:"Dream On",artist:"Aerosmith",duration:262,videoId:"89dGC8de0CA",genre:"Hard Rock",emoji:"💭"},
-  {id:24,title:"Sultans of Swing",artist:"Dire Straits",duration:345,videoId:"h0ffIJ7ZO4U",genre:"Rock",emoji:"👑"},
-  {id:25,title:"Highway to Hell",artist:"AC/DC",duration:208,videoId:"l482T0yN5KQ",genre:"Hard Rock",emoji:"🔥"},
-  {id:26,title:"Thunderstruck",artist:"AC/DC",duration:292,videoId:"v2AC41dglnM",genre:"Hard Rock",emoji:"⚡"},
-  {id:27,title:"Enter Sandman",artist:"Metallica",duration:332,videoId:"CD-E-LDc384",genre:"Metal",emoji:"😴"},
-  {id:28,title:"Nothing Else Matters",artist:"Metallica",duration:388,videoId:"tAGnKpE4NCI",genre:"Ballad",emoji:"🎻"},
-  {id:29,title:"Master of Puppets",artist:"Metallica",duration:515,videoId:"K8pR6Ck6PPM",genre:"Metal",emoji:"🎭"},
-  {id:30,title:"One",artist:"Metallica",duration:446,videoId:"WM8bTdBs-cw",genre:"Metal",emoji:"☝️"},
-  {id:31,title:"Crazy Train",artist:"Ozzy Osbourne",duration:296,videoId:"3MLp7YNTznE",genre:"Metal",emoji:"🚂"},
-  {id:32,title:"Mr. Crowley",artist:"Ozzy Osbourne",duration:296,videoId:"9-rEoFhiPV0",genre:"Metal",emoji:"🔮"},
-  {id:33,title:"Bark at the Moon",artist:"Ozzy Osbourne",duration:255,videoId:"v0ANyHITptA",genre:"Metal",emoji:"🌙"},
-  {id:34,title:"Ace of Spades",artist:"Motörhead",duration:167,videoId:"jKwnkg1uS4w",genre:"Metal",emoji:"🃏"},
-  {id:35,title:"The Trooper",artist:"Iron Maiden",duration:251,videoId:"gCQgIwfFslM",genre:"Metal",emoji:"⚔️"},
-  {id:36,title:"Run to the Hills",artist:"Iron Maiden",duration:230,videoId:"86URGgqONvA",genre:"Metal",emoji:"🏃"},
-  {id:37,title:"Fear of the Dark",artist:"Iron Maiden",duration:438,videoId:"kLgN73RpA6U",genre:"Metal",emoji:"🌑"},
-  {id:38,title:"Breaking the Law",artist:"Judas Priest",duration:154,videoId:"L397TWLwrUU",genre:"Metal",emoji:"⚖️"},
-  {id:39,title:"Painkiller",artist:"Judas Priest",duration:374,videoId:"nM__lPTWThU",genre:"Metal",emoji:"💊"},
-  {id:40,title:"You've Got Another Thing Comin'",artist:"Judas Priest",duration:310,videoId:"pB5ZE9Nl5pE",genre:"Metal",emoji:"💪"},
-  {id:41,title:"Symphony of Destruction",artist:"Megadeth",duration:244,videoId:"K6_3gKqU4HY",genre:"Thrash",emoji:"💥"},
-  {id:42,title:"Tornado of Souls",artist:"Megadeth",duration:317,videoId:"hONpRByRfTo",genre:"Thrash",emoji:"🌪️"},
-  {id:43,title:"Holy Wars... The Punishment Due",artist:"Megadeth",duration:392,videoId:"9d4ui9q7eDM",genre:"Thrash",emoji:"⚔️"},
-  {id:44,title:"Peace Sells",artist:"Megadeth",duration:242,videoId:"O_Ug5BOib_k",genre:"Thrash",emoji:"☮️"},
-  {id:45,title:"Angel of Death",artist:"Slayer",duration:291,videoId:"K6_3gKqU4HY",genre:"Thrash",emoji:"😇"},
-  {id:46,title:"Raining Blood",artist:"Slayer",duration:256,videoId:"z8ZqFlw6hYg",genre:"Thrash",emoji:"🌧️"},
-  {id:47,title:"Seasons in the Abyss",artist:"Slayer",duration:376,videoId:"k9pV0D9tLC0",genre:"Thrash",emoji:"🕳️"},
-  {id:48,title:"Caught in a Mosh",artist:"Anthrax",duration:300,videoId:"rN5H6H0N7B0",genre:"Thrash",emoji:"🤘"},
-  {id:49,title:"Indians",artist:"Anthrax",duration:326,videoId:"L7wDv_s5h_A",genre:"Thrash",emoji:"🏹"},
-  {id:50,title:"Madhouse",artist:"Anthrax",duration:256,videoId:"5qF_dc9mR08",genre:"Thrash",emoji:"🏥"},
-  {id:51,title:"Among the Living",artist:"Anthrax",duration:317,videoId:"p-d_fGp6ZtY",genre:"Thrash",emoji:"🧟"},
-  {id:52,title:"Armed and Dangerous",artist:"Anthrax",duration:256,videoId:"K1kCG7C_8iI",genre:"Thrash",emoji:"🔫"}
+  {id:8,title:"Bohemian Rhapsody",artist:"Queen",duration:354,videoId:"fJ9rUzIMcZQ",genre:"Classic",emoji:"👑",color:COLORS[8]},
+  {id:9,title:"Stairway to Heaven",artist:"Led Zeppelin",duration:482,videoId:"QkF3oxziUI4",genre:"Classic",emoji:"🪜",color:COLORS[9]},
+  {id:10,title:"Hotel California",artist:"Eagles",duration:391,videoId:"09839DpTctU",genre:"Classic",emoji:"🏨",color:COLORS[10]},
+  {id:11,title:"Back in Black",artist:"AC/DC",duration:255,videoId:"pAgnJDJN4VA",genre:"Hard Rock",emoji:"⚡",color:COLORS[11]},
+  {id:12,title:"Sweet Home Alabama",artist:"Lynyrd Skynyrd",duration:280,videoId:"eWRmRZpWxAA",genre:"Southern",emoji:"🏠",color:COLORS[12]},
+  {id:13,title:"Born to Run",artist:"Bruce Springsteen",duration:270,videoId:"IxuThNgl3YA",genre:"Rock",emoji:"🏃",color:COLORS[13]},
+  {id:14,title:"Comfortably Numb",artist:"Pink Floyd",duration:382,videoId:"tkJNyQfAprY",genre:"Prog",emoji:"🌀",color:COLORS[14]},
+  {id:15,title:"Smells Like Teen Spirit",artist:"Nirvana",duration:301,videoId:"hTWKbfoikeg",genre:"Grunge",emoji:"🌪️",color:COLORS[15]},
+  {id:16,title:"Purple Haze",artist:"Jimi Hendrix",duration:170,videoId:"cJunCsrhJjg",genre:"Psychedelic",emoji:"💜",color:COLORS[16]},
+  {id:17,title:"Walk This Way",artist:"Aerosmith",duration:205,videoId:"4c8O2jT69jI",genre:"Hard Rock",emoji:"🚶",color:COLORS[17]},
+  {id:18,title:"Don't Stop Believin'",artist:"Journey",duration:251,videoId:"VcjzHMhBtf0",genre:"Rock",emoji:"✨",color:COLORS[18]},
+  {id:19,title:"Layla",artist:"Derek & Dominos",duration:282,videoId:"TngViNwVHHA",genre:"Blues",emoji:"🎸",color:COLORS[19]},
+  {id:20,title:"Whole Lotta Love",artist:"Led Zeppelin",duration:334,videoId:"HQmmM_qwG4k",genre:"Hard Rock",emoji:"❤️",color:COLORS[0]},
+  {id:21,title:"Free Bird",artist:"Lynyrd Skynyrd",duration:549,videoId:"plpC5chCth4",genre:"Southern",emoji:"🕊️",color:COLORS[1]},
+  {id:22,title:"Paranoid",artist:"Black Sabbath",duration:172,videoId:"0qanF-91aJo",genre:"Metal",emoji:"😈",color:COLORS[2]},
+  {id:23,title:"Dream On",artist:"Aerosmith",duration:262,videoId:"89dGC8de0CA",genre:"Hard Rock",emoji:"💭",color:COLORS[3]},
+  {id:24,title:"Sultans of Swing",artist:"Dire Straits",duration:345,videoId:"h0ffIJ7ZO4U",genre:"Rock",emoji:"👑",color:COLORS[4]},
+  {id:25,title:"Highway to Hell",artist:"AC/DC",duration:208,videoId:"l482T0yN5KQ",genre:"Hard Rock",emoji:"🔥",color:COLORS[5]},
+  {id:26,title:"Thunderstruck",artist:"AC/DC",duration:292,videoId:"v2AC41dglnM",genre:"Hard Rock",emoji:"⚡",color:COLORS[6]},
+  {id:27,title:"Enter Sandman",artist:"Metallica",duration:332,videoId:"CD-E-LDc384",genre:"Metal",emoji:"😴",color:COLORS[7]},
+  {id:28,title:"Nothing Else Matters",artist:"Metallica",duration:388,videoId:"tAGnKpE4NCI",genre:"Ballad",emoji:"🎻",color:COLORS[8]},
+  {id:29,title:"Master of Puppets",artist:"Metallica",duration:515,videoId:"K8pR6Ck6PPM",genre:"Metal",emoji:"🎭",color:COLORS[9]},
+  {id:30,title:"One",artist:"Metallica",duration:446,videoId:"WM8bTdBs-cw",genre:"Metal",emoji:"☝️",color:COLORS[10]},
+  {id:31,title:"Crazy Train",artist:"Ozzy Osbourne",duration:296,videoId:"3MLp7YNTznE",genre:"Metal",emoji:"🚂",color:COLORS[11]},
+  {id:32,title:"Mr. Crowley",artist:"Ozzy Osbourne",duration:296,videoId:"9-rEoFhiPV0",genre:"Metal",emoji:"🔮",color:COLORS[12]},
+  {id:33,title:"Bark at the Moon",artist:"Ozzy Osbourne",duration:255,videoId:"v0ANyHITptA",genre:"Metal",emoji:"🌙",color:COLORS[13]},
+  {id:34,title:"Ace of Spades",artist:"Motörhead",duration:167,videoId:"jKwnkg1uS4w",genre:"Metal",emoji:"🃏",color:COLORS[14]},
+  {id:35,title:"The Trooper",artist:"Iron Maiden",duration:251,videoId:"gCQgIwfFslM",genre:"Metal",emoji:"⚔️",color:COLORS[15]},
+  {id:36,title:"Run to the Hills",artist:"Iron Maiden",duration:230,videoId:"86URGgqONvA",genre:"Metal",emoji:"🏃",color:COLORS[16]},
+  {id:37,title:"Fear of the Dark",artist:"Iron Maiden",duration:438,videoId:"kLgN73RpA6U",genre:"Metal",emoji:"🌑",color:COLORS[17]},
+  {id:38,title:"Breaking the Law",artist:"Judas Priest",duration:154,videoId:"L397TWLwrUU",genre:"Metal",emoji:"⚖️",color:COLORS[18]},
+  {id:39,title:"Painkiller",artist:"Judas Priest",duration:374,videoId:"nM__lPTWThU",genre:"Metal",emoji:"💊",color:COLORS[19]},
+  {id:40,title:"You've Got Another Thing Comin'",artist:"Judas Priest",duration:310,videoId:"pB5ZE9Nl5pE",genre:"Metal",emoji:"💪",color:COLORS[0]},
+  {id:41,title:"Symphony of Destruction",artist:"Megadeth",duration:244,videoId:"K6_3gKqU4HY",genre:"Thrash",emoji:"💥",color:COLORS[1]},
+  {id:42,title:"Tornado of Souls",artist:"Megadeth",duration:317,videoId:"hONpRByRfTo",genre:"Thrash",emoji:"🌪️",color:COLORS[2]},
+  {id:43,title:"Holy Wars... The Punishment Due",artist:"Megadeth",duration:392,videoId:"9d4ui9q7eDM",genre:"Thrash",emoji:"⚔️",color:COLORS[3]},
+  {id:44,title:"Peace Sells",artist:"Megadeth",duration:242,videoId:"O_Ug5BOib_k",genre:"Thrash",emoji:"☮️",color:COLORS[4]},
+  {id:45,title:"Angel of Death",artist:"Slayer",duration:291,videoId:"K6_3gKqU4HY",genre:"Thrash",emoji:"😇",color:COLORS[5]},
+  {id:46,title:"Raining Blood",artist:"Slayer",duration:256,videoId:"z8ZqFlw6hYg",genre:"Thrash",emoji:"🌧️",color:COLORS[6]},
+  {id:47,title:"Seasons in the Abyss",artist:"Slayer",duration:376,videoId:"k9pV0D9tLC0",genre:"Thrash",emoji:"🕳️",color:COLORS[7]},
+  {id:48,title:"Caught in a Mosh",artist:"Anthrax",duration:300,videoId:"rN5H6H0N7B0",genre:"Thrash",emoji:"🤘",color:COLORS[8]},
+  {id:49,title:"Indians",artist:"Anthrax",duration:326,videoId:"L7wDv_s5h_A",genre:"Thrash",emoji:"🏹",color:COLORS[9]},
+  {id:50,title:"Madhouse",artist:"Anthrax",duration:256,videoId:"5qF_dc9mR08",genre:"Thrash",emoji:"🏥",color:COLORS[10]},
+  {id:51,title:"Among the Living",artist:"Anthrax",duration:317,videoId:"p-d_fGp6ZtY",genre:"Thrash",emoji:"🧟",color:COLORS[11]},
+  {id:52,title:"Armed and Dangerous",artist:"Anthrax",duration:256,videoId:"K1kCG7C_8iI",genre:"Thrash",emoji:"🔫",color:COLORS[12]}
 ];
 
 const GENRES = ["Todos","Classic","Hard Rock","Metal","Prog","Rock","Southern","Urbano","Pop","Thrash"];
@@ -384,7 +384,6 @@ let searchQuery="";
 function formatTime(s){let m=Math.floor(s/60),sec=Math.floor(s%60);return m+":"+(sec<10?'0':'')+sec}
 function showToast(msg){let t=document.getElementById('toastMsg');t.innerText=msg;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,1500);}
 
-// YOUTUBE PLAYER
 function onYouTubeIframeAPIReady(){
   player=new YT.Player('ytPlayer',{
     height:'100%',width:'100%',videoId:TRACKS[0].videoId,
@@ -461,13 +460,12 @@ function toggleLike(id){
   showToast(likes.has(id)?'❤️ Añadida a favoritos':'💔 Eliminada');
 }
 
-// RENDER PLAYLIST ESPECIAL (8 canciones de la captura)
 function renderSpecialPlaylist(){
   let specialTracks = TRACKS.filter(t => t.special === true);
   let container = document.getElementById('specialList');
   container.innerHTML = specialTracks.map((t, i) => `
     <div class="special-item" onclick="playTrack(${t.id})">
-      <span class="num">${i+1}</span>
+      <div class="cover" style="background:${t.color}">${t.emoji}</div>
       <div class="info">
         <div class="title">${t.title}</div>
         <div class="artist">${t.artist}</div>
@@ -478,13 +476,16 @@ function renderSpecialPlaylist(){
   `).join('');
 }
 
-// RENDER HOME
 function renderHomeGrid(){
   let filtered=TRACKS.filter(t=>currentGenre==='Todos'||t.genre===currentGenre);
   let grid=document.getElementById('homeGrid');
   grid.innerHTML=filtered.map(t=>`
     <div class="card" onclick="playTrack(${t.id})">
-      <div class="card-img">${t.emoji}</div>
+      <div class="card-img" style="background:${t.color}">
+        ${t.emoji}
+        <div class="gradient"></div>
+        <div class="play-overlay">▶</div>
+      </div>
       <div class="card-info">
         <div class="card-title">${t.title}</div>
         <div class="card-sub">${t.artist}</div>
@@ -508,7 +509,11 @@ function renderSearch(){
   let container=document.getElementById('searchResults');
   container.innerHTML=filtered.map(t=>`
     <div class="card" onclick="playTrack(${t.id})">
-      <div class="card-img">${t.emoji}</div>
+      <div class="card-img" style="background:${t.color}">
+        ${t.emoji}
+        <div class="gradient"></div>
+        <div class="play-overlay">▶</div>
+      </div>
       <div class="card-info">
         <div class="card-title">${t.title}</div>
         <div class="card-sub">${t.artist}</div>
@@ -526,7 +531,7 @@ function renderLibrary(){
   }
   container.innerHTML=favTracks.map(t=>`
     <div class="list-item" onclick="playTrack(${t.id})">
-      <div class="list-art">${t.emoji}</div>
+      <div class="list-art" style="background:${t.color}">${t.emoji}</div>
       <div class="list-info">
         <div class="list-title">${t.title}</div>
         <div class="list-sub">${t.artist}</div>
@@ -538,9 +543,10 @@ function renderLibrary(){
 
 function renderArtists(){
   let container=document.getElementById('artistsGrid');
-  container.innerHTML=ARTISTS.map(artist=>`
+  const artistColors = ['linear-gradient(135deg,#f093fb,#f5576c)','linear-gradient(135deg,#4facfe,#00f2fe)','linear-gradient(135deg,#43e97b,#38f9d7)','linear-gradient(135deg,#fa709a,#fee140)','linear-gradient(135deg,#a18cd1,#fbc2eb)','linear-gradient(135deg,#fccb90,#d57eeb)','linear-gradient(135deg,#89f7fe,#66a6ff)','linear-gradient(135deg,#f6d365,#fda085)','linear-gradient(135deg,#ffecd2,#fcb69f)','linear-gradient(135deg,#a1c4fd,#c2e9fb)','linear-gradient(135deg,#d4fc79,#96e6a1)','linear-gradient(135deg,#f093fb,#f5576c)'];
+  container.innerHTML=ARTISTS.map((artist,i)=>`
     <div class="card" onclick="showToast('🎤 Escuchando ${artist}')">
-      <div class="card-img">🎤</div>
+      <div class="card-img" style="background:${artistColors[i%artistColors.length]}">🎤</div>
       <div class="card-info">
         <div class="card-title">${artist}</div>
         <div class="card-sub">Artista</div>
@@ -549,7 +555,6 @@ function renderArtists(){
   `).join('');
 }
 
-// PROGRESS
 function startProgress(){
   setInterval(()=>{
     if(player&&player.getCurrentTime&&currentId!==null){
@@ -561,7 +566,6 @@ function startProgress(){
   },500);
 }
 
-// NAVEGACIÓN
 function switchScreen(screenId){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(`screen${screenId.charAt(0).toUpperCase()+screenId.slice(1)}`).classList.add('active');
@@ -572,7 +576,6 @@ function switchScreen(screenId){
   if(screenId==='creator')renderArtists();
 }
 
-// EVENTOS
 function initEvents(){
   document.getElementById('playPauseBtn').onclick=togglePlay;
   document.getElementById('nextBtn').onclick=nextTrack;
@@ -597,7 +600,6 @@ function initEvents(){
   });
 }
 
-// INICIO
 let script=document.createElement('script');
 script.src='https://www.youtube.com/iframe_api';
 document.head.appendChild(script);
