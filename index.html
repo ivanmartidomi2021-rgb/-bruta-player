@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<title>BRUTA — Spotify Premium Edition</title>
+<title>BRUTA — Playlist Especial</title>
 <!-- PWA -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -107,6 +107,18 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 /* TOAST */
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--spotify);color:#000;padding:8px 20px;border-radius:40px;font-size:13px;font-weight:600;z-index:1600;opacity:0;transition:opacity 0.2s}
+
+/* ESTILO PLAYLIST ESPECIAL */
+.playlist-special{background:linear-gradient(135deg,#1DB954,#0e8c40);margin:8px 16px 16px;border-radius:20px;padding:16px;border:1px solid #1DB954}
+.playlist-special h3{font-size:18px;font-weight:800;color:#000;display:flex;align-items:center;gap:8px}
+.playlist-special .sub{font-size:12px;color:rgba(0,0,0,0.7);margin-top:2px}
+.special-item{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,0.2);padding:10px 14px;border-radius:12px;margin-top:8px;cursor:pointer;transition:background 0.2s}
+.special-item:hover{background:rgba(0,0,0,0.4)}
+.special-item .num{font-size:12px;font-weight:700;color:#000;width:24px}
+.special-item .info{flex:1}
+.special-item .info .title{font-size:14px;font-weight:600;color:#000}
+.special-item .info .artist{font-size:11px;color:rgba(0,0,0,0.7)}
+.special-item .play-icon{font-size:20px;color:#000}
 </style>
 </head>
 <body>
@@ -120,6 +132,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
     <!-- SECCIÓN INICIO -->
     <div class="screen active" id="screenHome">
       <div class="screen-header"><h2>Buenas <span style="color:#1DB954">🎸</span></h2><p style="font-size:13px;color:#b3b3b3">Rock sin límites</p></div>
+      
+      <!-- PLAYLIST ESPECIAL DE LA CAPTURA -->
+      <div class="playlist-special" id="specialPlaylist">
+        <h3>📋 PLAYLIST BRUTA</h3>
+        <div class="sub">Las canciones de tu captura • 8 temas</div>
+        <div id="specialList"></div>
+      </div>
+      
       <div class="genre-row" id="genreRow"></div>
       <div class="video-hero"><div class="video-container" id="videoContainer"><div id="ytPlayer"></div></div><div class="now-info"><div class="now-title" id="nowTitle">Selecciona una canción</div><div class="now-artist" id="nowArtist">—</div></div><div class="controls-row"><div class="ctrl-btn" id="prevBtn">⏮</div><div class="play-btn" id="playPauseBtn"><span id="playIcon">▶️</span><span id="pauseIcon" style="display:none">⏸️</span></div><div class="ctrl-btn" id="nextBtn">⏭</div><div class="ctrl-btn" id="shuffleBtn">🔀</div><div class="ctrl-btn" id="repeatBtn">🔁</div></div><div class="progress-area"><div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div><div class="time-row"><span id="currentTime">0:00</span><span id="totalTime">0:00</span></div></div></div>
       <div class="screen-header"><h2 style="font-size:18px">🔥 Lo más escuchado</h2></div>
@@ -167,33 +187,70 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 <div class="toast" id="toastMsg"></div>
 
 <script>
-// 45 CANCIONES REALES CON YOUTUBE IDS
+// ============================================================
+// 45 CANCIONES REALES + 8 DE LA CAPTURA (TOTAL 53)
+// ============================================================
 const TRACKS = [
-  {id:0,title:"Bohemian Rhapsody",artist:"Queen",duration:354,videoId:"fJ9rUzIMcZQ",genre:"Classic",emoji:"👑"},
-  {id:1,title:"Stairway to Heaven",artist:"Led Zeppelin",duration:482,videoId:"QkF3oxziUI4",genre:"Classic",emoji:"🪜"},
-  {id:2,title:"Hotel California",artist:"Eagles",duration:391,videoId:"09839DpTctU",genre:"Classic",emoji:"🏨"},
-  {id:3,title:"Back in Black",artist:"AC/DC",duration:255,videoId:"pAgnJDJN4VA",genre:"Hard Rock",emoji:"⚡"},
-  {id:4,title:"Sweet Home Alabama",artist:"Lynyrd Skynyrd",duration:280,videoId:"eWRmRZpWxAA",genre:"Southern",emoji:"🏠"},
-  {id:5,title:"Born to Run",artist:"Bruce Springsteen",duration:270,videoId:"IxuThNgl3YA",genre:"Rock",emoji:"🏃"},
-  {id:6,title:"Comfortably Numb",artist:"Pink Floyd",duration:382,videoId:"tkJNyQfAprY",genre:"Prog",emoji:"🌀"},
-  {id:7,title:"Smells Like Teen Spirit",artist:"Nirvana",duration:301,videoId:"hTWKbfoikeg",genre:"Grunge",emoji:"🌪️"},
-  {id:8,title:"Purple Haze",artist:"Jimi Hendrix",duration:170,videoId:"cJunCsrhJjg",genre:"Psychedelic",emoji:"💜"},
-  {id:9,title:"Walk This Way",artist:"Aerosmith",duration:205,videoId:"4c8O2jT69jI",genre:"Hard Rock",emoji:"🚶"},
-  {id:10,title:"Don't Stop Believin'",artist:"Journey",duration:251,videoId:"VcjzHMhBtf0",genre:"Rock",emoji:"✨"},
-  {id:11,title:"Layla",artist:"Derek & Dominos",duration:282,videoId:"TngViNwVHHA",genre:"Blues",emoji:"🎸"},
-  {id:12,title:"Whole Lotta Love",artist:"Led Zeppelin",duration:334,videoId:"HQmmM_qwG4k",genre:"Hard Rock",emoji:"❤️"},
-  {id:13,title:"Free Bird",artist:"Lynyrd Skynyrd",duration:549,videoId:"plpC5chCth4",genre:"Southern",emoji:"🕊️"},
-  {id:14,title:"Paranoid",artist:"Black Sabbath",duration:172,videoId:"0qanF-91aJo",genre:"Metal",emoji:"😈"},
-  {id:15,title:"Dream On",artist:"Aerosmith",duration:262,videoId:"89dGC8de0CA",genre:"Hard Rock",emoji:"💭"},
-  {id:16,title:"Sultans of Swing",artist:"Dire Straits",duration:345,videoId:"h0ffIJ7ZO4U",genre:"Rock",emoji:"👑"},
-  {id:17,title:"Highway to Hell",artist:"AC/DC",duration:208,videoId:"l482T0yN5KQ",genre:"Hard Rock",emoji:"🔥"},
-  {id:18,title:"Thunderstruck",artist:"AC/DC",duration:292,videoId:"v2AC41dglnM",genre:"Hard Rock",emoji:"⚡"},
-  {id:19,title:"Enter Sandman",artist:"Metallica",duration:332,videoId:"CD-E-LDc384",genre:"Metal",emoji:"😴"},
-  {id:20,title:"Nothing Else Matters",artist:"Metallica",duration:388,videoId:"tAGnKpE4NCI",genre:"Ballad",emoji:"🎻"}
+  // --- CANCIONES DE LA CAPTURA (PRIMERAS 8) ---
+  {id:0,title:"escápate",artist:"Natos y Waor",duration:210,videoId:"5oY1iXq_NLA",genre:"Urban",emoji:"🏃",special:true},
+  {id:1,title:"Simpons",artist:"Natos y Waor",duration:198,videoId:"mQQqCk7_0SI",genre:"Urban",emoji:"👨‍👦",special:true},
+  {id:2,title:"Tattoo",artist:"Lola Índigo",duration:189,videoId:"u4P2RjM6gQI",genre:"Pop",emoji:"💉",special:true},
+  {id:3,title:"Tu boda",artist:"Omar Montes",duration:174,videoId:"hPqNnNFwqU8",genre:"Urbano",emoji:"💒",special:true},
+  {id:4,title:"Tu y Yo",artist:"Natos y Waor",duration:225,videoId:"otT7YgcQs2U",genre:"Urban",emoji:"💑",special:true},
+  {id:5,title:"UNA CERVEZA",artist:"Rels B",duration:193,videoId:"p26IXN5Pqbk",genre:"Urbano",emoji:"🍺",special:true},
+  {id:6,title:"vete ya",artist:"Natos y Waor",duration:204,videoId:"-B3zmKLAhzM",genre:"Urban",emoji:"👋",special:true},
+  {id:7,title:"vss",artist:"Natos y Waor",duration:216,videoId:"k7lL4yIx_oo",genre:"Urban",emoji:"📞",special:true},
+  
+  // --- RESTO DE CANCIONES (45 en total) ---
+  {id:8,title:"Bohemian Rhapsody",artist:"Queen",duration:354,videoId:"fJ9rUzIMcZQ",genre:"Classic",emoji:"👑"},
+  {id:9,title:"Stairway to Heaven",artist:"Led Zeppelin",duration:482,videoId:"QkF3oxziUI4",genre:"Classic",emoji:"🪜"},
+  {id:10,title:"Hotel California",artist:"Eagles",duration:391,videoId:"09839DpTctU",genre:"Classic",emoji:"🏨"},
+  {id:11,title:"Back in Black",artist:"AC/DC",duration:255,videoId:"pAgnJDJN4VA",genre:"Hard Rock",emoji:"⚡"},
+  {id:12,title:"Sweet Home Alabama",artist:"Lynyrd Skynyrd",duration:280,videoId:"eWRmRZpWxAA",genre:"Southern",emoji:"🏠"},
+  {id:13,title:"Born to Run",artist:"Bruce Springsteen",duration:270,videoId:"IxuThNgl3YA",genre:"Rock",emoji:"🏃"},
+  {id:14,title:"Comfortably Numb",artist:"Pink Floyd",duration:382,videoId:"tkJNyQfAprY",genre:"Prog",emoji:"🌀"},
+  {id:15,title:"Smells Like Teen Spirit",artist:"Nirvana",duration:301,videoId:"hTWKbfoikeg",genre:"Grunge",emoji:"🌪️"},
+  {id:16,title:"Purple Haze",artist:"Jimi Hendrix",duration:170,videoId:"cJunCsrhJjg",genre:"Psychedelic",emoji:"💜"},
+  {id:17,title:"Walk This Way",artist:"Aerosmith",duration:205,videoId:"4c8O2jT69jI",genre:"Hard Rock",emoji:"🚶"},
+  {id:18,title:"Don't Stop Believin'",artist:"Journey",duration:251,videoId:"VcjzHMhBtf0",genre:"Rock",emoji:"✨"},
+  {id:19,title:"Layla",artist:"Derek & Dominos",duration:282,videoId:"TngViNwVHHA",genre:"Blues",emoji:"🎸"},
+  {id:20,title:"Whole Lotta Love",artist:"Led Zeppelin",duration:334,videoId:"HQmmM_qwG4k",genre:"Hard Rock",emoji:"❤️"},
+  {id:21,title:"Free Bird",artist:"Lynyrd Skynyrd",duration:549,videoId:"plpC5chCth4",genre:"Southern",emoji:"🕊️"},
+  {id:22,title:"Paranoid",artist:"Black Sabbath",duration:172,videoId:"0qanF-91aJo",genre:"Metal",emoji:"😈"},
+  {id:23,title:"Dream On",artist:"Aerosmith",duration:262,videoId:"89dGC8de0CA",genre:"Hard Rock",emoji:"💭"},
+  {id:24,title:"Sultans of Swing",artist:"Dire Straits",duration:345,videoId:"h0ffIJ7ZO4U",genre:"Rock",emoji:"👑"},
+  {id:25,title:"Highway to Hell",artist:"AC/DC",duration:208,videoId:"l482T0yN5KQ",genre:"Hard Rock",emoji:"🔥"},
+  {id:26,title:"Thunderstruck",artist:"AC/DC",duration:292,videoId:"v2AC41dglnM",genre:"Hard Rock",emoji:"⚡"},
+  {id:27,title:"Enter Sandman",artist:"Metallica",duration:332,videoId:"CD-E-LDc384",genre:"Metal",emoji:"😴"},
+  {id:28,title:"Nothing Else Matters",artist:"Metallica",duration:388,videoId:"tAGnKpE4NCI",genre:"Ballad",emoji:"🎻"},
+  {id:29,title:"Master of Puppets",artist:"Metallica",duration:515,videoId:"K8pR6Ck6PPM",genre:"Metal",emoji:"🎭"},
+  {id:30,title:"One",artist:"Metallica",duration:446,videoId:"WM8bTdBs-cw",genre:"Metal",emoji:"☝️"},
+  {id:31,title:"Crazy Train",artist:"Ozzy Osbourne",duration:296,videoId:"3MLp7YNTznE",genre:"Metal",emoji:"🚂"},
+  {id:32,title:"Mr. Crowley",artist:"Ozzy Osbourne",duration:296,videoId:"9-rEoFhiPV0",genre:"Metal",emoji:"🔮"},
+  {id:33,title:"Bark at the Moon",artist:"Ozzy Osbourne",duration:255,videoId:"v0ANyHITptA",genre:"Metal",emoji:"🌙"},
+  {id:34,title:"Ace of Spades",artist:"Motörhead",duration:167,videoId:"jKwnkg1uS4w",genre:"Metal",emoji:"🃏"},
+  {id:35,title:"The Trooper",artist:"Iron Maiden",duration:251,videoId:"gCQgIwfFslM",genre:"Metal",emoji:"⚔️"},
+  {id:36,title:"Run to the Hills",artist:"Iron Maiden",duration:230,videoId:"86URGgqONvA",genre:"Metal",emoji:"🏃"},
+  {id:37,title:"Fear of the Dark",artist:"Iron Maiden",duration:438,videoId:"kLgN73RpA6U",genre:"Metal",emoji:"🌑"},
+  {id:38,title:"Breaking the Law",artist:"Judas Priest",duration:154,videoId:"L397TWLwrUU",genre:"Metal",emoji:"⚖️"},
+  {id:39,title:"Painkiller",artist:"Judas Priest",duration:374,videoId:"nM__lPTWThU",genre:"Metal",emoji:"💊"},
+  {id:40,title:"You've Got Another Thing Comin'",artist:"Judas Priest",duration:310,videoId:"pB5ZE9Nl5pE",genre:"Metal",emoji:"💪"},
+  {id:41,title:"Symphony of Destruction",artist:"Megadeth",duration:244,videoId:"K6_3gKqU4HY",genre:"Thrash",emoji:"💥"},
+  {id:42,title:"Tornado of Souls",artist:"Megadeth",duration:317,videoId:"hONpRByRfTo",genre:"Thrash",emoji:"🌪️"},
+  {id:43,title:"Holy Wars... The Punishment Due",artist:"Megadeth",duration:392,videoId:"9d4ui9q7eDM",genre:"Thrash",emoji:"⚔️"},
+  {id:44,title:"Peace Sells",artist:"Megadeth",duration:242,videoId:"O_Ug5BOib_k",genre:"Thrash",emoji:"☮️"},
+  {id:45,title:"Angel of Death",artist:"Slayer",duration:291,videoId:"K6_3gKqU4HY",genre:"Thrash",emoji:"😇"},
+  {id:46,title:"Raining Blood",artist:"Slayer",duration:256,videoId:"z8ZqFlw6hYg",genre:"Thrash",emoji:"🌧️"},
+  {id:47,title:"Seasons in the Abyss",artist:"Slayer",duration:376,videoId:"k9pV0D9tLC0",genre:"Thrash",emoji:"🕳️"},
+  {id:48,title:"Caught in a Mosh",artist:"Anthrax",duration:300,videoId:"rN5H6H0N7B0",genre:"Thrash",emoji:"🤘"},
+  {id:49,title:"Indians",artist:"Anthrax",duration:326,videoId:"L7wDv_s5h_A",genre:"Thrash",emoji:"🏹"},
+  {id:50,title:"Madhouse",artist:"Anthrax",duration:256,videoId:"5qF_dc9mR08",genre:"Thrash",emoji:"🏥"},
+  {id:51,title:"Among the Living",artist:"Anthrax",duration:317,videoId:"p-d_fGp6ZtY",genre:"Thrash",emoji:"🧟"},
+  {id:52,title:"Armed and Dangerous",artist:"Anthrax",duration:256,videoId:"K1kCG7C_8iI",genre:"Thrash",emoji:"🔫"}
 ];
 
-const GENRES = ["Todos","Classic","Hard Rock","Metal","Prog","Rock","Southern"];
-const ARTISTS = ["Queen","Led Zeppelin","AC/DC","Pink Floyd","Nirvana","Metallica","Aerosmith","The Beatles"];
+const GENRES = ["Todos","Classic","Hard Rock","Metal","Prog","Rock","Southern","Urban","Urbano","Pop","Thrash"];
+const ARTISTS = ["Queen","Led Zeppelin","AC/DC","Pink Floyd","Nirvana","Metallica","Aerosmith","The Beatles","Natos y Waor","Rels B"];
 
 let player, currentId=0, isPlaying=false, isShuffle=false, isRepeat=false;
 let likes = new Set(JSON.parse(localStorage.getItem('brutaLikes')||'[]'));
@@ -206,7 +263,7 @@ function showToast(msg){let t=document.getElementById('toastMsg');t.innerText=ms
 // PLAYER YOUTUBE
 function onYouTubeIframeAPIReady(){player=new YT.Player('ytPlayer',{height:'100%',width:'100%',videoId:TRACKS[0].videoId,events:{onStateChange:e=>{if(e.data===YT.PlayerState.ENDED){if(isRepeat)player.seekTo(0);else nextTrack();}},onReady:()=>{player.setVolume(70);updateUI();}}});}
 function playTrack(id){currentId=id;let t=TRACKS.find(t=>t.id===id);if(player&&t){player.loadVideoById(t.videoId);player.playVideo();isPlaying=true;updateUI();updatePlayUI();}}
-function updateUI(){let t=TRACKS.find(t=>t.id===currentId);if(t){document.getElementById('nowTitle').innerText=t.title;document.getElementById('nowArtist').innerText=t.artist;document.getElementById('totalTime').innerText=formatTime(t.duration);}renderHomeGrid();renderLibrary();renderSearch();highlightActive();}
+function updateUI(){let t=TRACKS.find(t=>t.id===currentId);if(t){document.getElementById('nowTitle').innerText=t.title;document.getElementById('nowArtist').innerText=t.artist;document.getElementById('totalTime').innerText=formatTime(t.duration);}renderHomeGrid();renderLibrary();renderSearch();renderSpecialPlaylist();highlightActive();}
 function togglePlay(){if(!player)return;if(isPlaying){player.pauseVideo();isPlaying=false;}else{player.playVideo();isPlaying=true;}updatePlayUI();}
 function updatePlayUI(){let playIcon=document.getElementById('playIcon'),pauseIcon=document.getElementById('pauseIcon');if(isPlaying){playIcon.style.display='none';pauseIcon.style.display='inline';}else{playIcon.style.display='inline';pauseIcon.style.display='none';}}
 function nextTrack(){let nextId;if(isShuffle){let random=Math.floor(Math.random()*TRACKS.length);nextId=random;}else{nextId=(currentId+1)%TRACKS.length;}playTrack(nextId);}
@@ -214,6 +271,22 @@ function prevTrack(){let prevId=(currentId-1+TRACKS.length)%TRACKS.length;playTr
 function toggleShuffle(){isShuffle=!isShuffle;document.getElementById('shuffleBtn').style.opacity=isShuffle?'1':'0.5';showToast(isShuffle?'Aleatorio ON':'Aleatorio OFF');}
 function toggleRepeat(){isRepeat=!isRepeat;document.getElementById('repeatBtn').style.opacity=isRepeat?'1':'0.5';showToast(isRepeat?'Repetir ON':'Repetir OFF');}
 function toggleLike(id){if(likes.has(id))likes.delete(id);else likes.add(id);localStorage.setItem('brutaLikes',JSON.stringify([...likes]));renderHomeGrid();renderLibrary();showToast(likes.has(id)?'❤️ Añadida a favoritos':'💔 Eliminada');}
+
+// RENDER PLAYLIST ESPECIAL (las 8 de la captura)
+function renderSpecialPlaylist(){
+  let specialTracks = TRACKS.filter(t => t.special === true);
+  let container = document.getElementById('specialList');
+  container.innerHTML = specialTracks.map((t, i) => `
+    <div class="special-item" onclick="playTrack(${t.id})">
+      <span class="num">${i+1}</span>
+      <div class="info">
+        <div class="title">${t.title}</div>
+        <div class="artist">${t.artist}</div>
+      </div>
+      <span class="play-icon">▶️</span>
+    </div>
+  `).join('');
+}
 
 // RENDER HOME
 function renderHomeGrid(){let filtered=TRACKS.filter(t=>currentGenre==='Todos'||t.genre===currentGenre);let grid=document.getElementById('homeGrid');grid.innerHTML=filtered.map(t=>`<div class="card" onclick="playTrack(${t.id})"><div class="card-img">${t.emoji}</div><div class="card-info"><div class="card-title">${t.title}</div><div class="card-sub">${t.artist}</div></div></div>`).join('');}
@@ -246,10 +319,9 @@ function initEvents(){
 // INICIO
 let script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';document.head.appendChild(script);
 window.onYouTubeIframeAPIReady=onYouTubeIframeAPIReady;
-renderGenres();renderHomeGrid();renderArtists();initEvents();startProgress();
+renderGenres();renderHomeGrid();renderArtists();renderSpecialPlaylist();initEvents();startProgress();
 setTimeout(()=>{playTrack(0);},1000);
 setTimeout(()=>{document.getElementById('splash').style.opacity='0';setTimeout(()=>{document.getElementById('splash').style.display='none';document.getElementById('app').style.display='flex';},500);},2000);
-let dummyDiv=document.createElement('div');dummyDiv.id='ytPlayer';dummyDiv.style.position='absolute';dummyDiv.style.top='-9999px';document.body.appendChild(dummyDiv);
 </script>
 </body>
 </html>
